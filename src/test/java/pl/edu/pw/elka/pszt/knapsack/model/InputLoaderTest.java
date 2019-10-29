@@ -21,6 +21,7 @@ class InputLoaderTest {
         StringBuilder stringBuilder = new StringBuilder();
         while (scanner.hasNextLine())
             stringBuilder.append(scanner.nextLine()).append("\n");
+        scanner.close();
         return stringBuilder.toString();
     }
 
@@ -96,6 +97,12 @@ class InputLoaderTest {
         @DisplayName("non numeric weight")
         void test6() {
             test("value must be number, but found: b", PATH + "exceptions/test6.txt");
+        }
+
+        @Test
+        @DisplayName("double value")
+        void test7() {
+            test("value must be Long, but found: 123.2",PATH + "exceptions/test7.txt");
         }
 
         private void test(String expected, String path) {
