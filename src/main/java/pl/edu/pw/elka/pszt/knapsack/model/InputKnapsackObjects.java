@@ -15,8 +15,4 @@ public class InputKnapsackObjects {
     public void add(KnapsackObject knapsackObject) {
         knapsackObjects.add(knapsackObject);
     }
-
-    public void add(Long weight, Long value) {
-        add(new KnapsackObject(weight, value));
-    }
 }
