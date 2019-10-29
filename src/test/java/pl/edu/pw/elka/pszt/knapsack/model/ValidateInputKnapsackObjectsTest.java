@@ -13,9 +13,9 @@ class ValidateInputKnapsackObjectsTest {
         @BeforeEach
         void init(){
             inputKnapsackObjects = new InputKnapsackObjects(10L);
-            inputKnapsackObjects.add(new KnapsackObject(1L, 2L));
-            inputKnapsackObjects.add(new KnapsackObject(3L, 4L));
-            inputKnapsackObjects.add(new KnapsackObject(100L,200L));
+            inputKnapsackObjects.add(new Item(1L, 2L));
+            inputKnapsackObjects.add(new Item(3L, 4L));
+            inputKnapsackObjects.add(new Item(100L,200L));
         }
 
         @Test
@@ -34,9 +34,9 @@ class ValidateInputKnapsackObjectsTest {
         @BeforeEach
         void init(){
             inputKnapsackObjects = new InputKnapsackObjects(-10L);
-            inputKnapsackObjects.add(new KnapsackObject(1L, -2L));
-            inputKnapsackObjects.add(new KnapsackObject(3L, 4L));
-            inputKnapsackObjects.add(new KnapsackObject(100L,200L));
+            inputKnapsackObjects.add(new Item(1L, -2L));
+            inputKnapsackObjects.add(new Item(3L, 4L));
+            inputKnapsackObjects.add(new Item(100L,200L));
         }
 
         @Test

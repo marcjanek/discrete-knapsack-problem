@@ -36,7 +36,7 @@ public class InputLoader {
         return Long.parseLong(capacity);
     }
 
-    private KnapsackObject getKnapsackObject(String line) throws IOException {
+    private Item getKnapsackObject(String line) throws IOException {
         String[] strings = line.split(" ");
         if (strings.length != 2)
             throw new IOException(String.format("Line must contain two numbers delimited with space, but found %s",
@@ -49,7 +49,7 @@ public class InputLoader {
             throw new IOException(String.format("value must be number, but found: %s", strings[1]));
         if (nonLong(strings[1]))
             throw new IOException(String.format("value must be Long, but found: %s", strings[1]));
-        return new KnapsackObject(Long.parseLong(strings[0]), Long.parseLong(strings[1]));
+        return new Item(Long.parseLong(strings[0]), Long.parseLong(strings[1]));
     }
 
     private boolean nonLong(String string) {

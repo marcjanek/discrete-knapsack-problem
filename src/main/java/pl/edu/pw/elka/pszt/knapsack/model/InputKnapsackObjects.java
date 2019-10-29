@@ -10,9 +10,9 @@ import java.util.List;
 @Getter
 public class InputKnapsackObjects {
     private final Long knapsackCapacity;
-    private final List<KnapsackObject> knapsackObjects = new ArrayList<>();
+    private final List<Item> items = new ArrayList<>();
 
-    public void add(KnapsackObject knapsackObject) {
-        knapsackObjects.add(knapsackObject);
+    public void add(Item item) {
+        items.add(item);
     }
 }

@@ -16,7 +16,7 @@ public class Application {
         }
         try {
             new Knapsack(args[0], args[1]).run();
-        } catch (IOException e) {
+        } catch (IOException | CloneNotSupportedException e) {
             e.printStackTrace();
         }
     }
