@@ -100,9 +100,14 @@ class InputLoaderTest {
         }
 
         @Test
-        @DisplayName("double value")
+        @DisplayName("double in weight")
         void test7() {
             test("value must be Long, but found: 123.2",PATH + "exceptions/test7.txt");
+        }
+        @Test
+        @DisplayName("double in weight")
+        void test8() {
+            test("Capacity must be Long, but found: 10.1",PATH + "exceptions/test8.txt");
         }
 
         private void test(String expected, String path) {

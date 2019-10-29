@@ -31,6 +31,8 @@ public class InputLoader {
     private Long getCapacity(String capacity) throws IOException {
         if (nonNumber(capacity))
             throw new IOException(String.format("Capacity must be number, but found: %s", capacity));
+        if (nonLong(capacity))
+            throw new IOException(String.format("Capacity must be Long, but found: %s", capacity));
         return Long.parseLong(capacity);
     }
 
