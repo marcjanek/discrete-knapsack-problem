@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 @Getter
-public class Chromosome {
+public class Chromosome implements Cloneable {
     List<Gen> gens = new ArrayList<>();
 
     public void add(Gen gen) {
@@ -44,12 +44,12 @@ public class Chromosome {
                 .filter(e -> e.isPresent)
                 .collect(Collectors.toList());
     }
+
     @Override
-    public Chromosome clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         Chromosome chromosome = new Chromosome();
-        for (Gen e : this.gens) {
-            chromosome.add(e.clone());
-        }
+        for (Gen e : this.gens)
+            chromosome.add((Gen) e.clone());
         return chromosome;
     }
 

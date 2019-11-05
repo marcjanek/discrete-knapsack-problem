@@ -5,7 +5,7 @@ import lombok.Setter;
 import pl.edu.pw.elka.pszt.knapsack.model.Item;
 
 @Getter @Setter
-public class Gen extends Item {
+public class Gen extends Item implements Cloneable {
     Boolean isPresent = false;
     public Gen(Long weight, Long value) {
         super(weight, value);
@@ -13,11 +13,9 @@ public class Gen extends Item {
     void negateIsPresent(){
         isPresent = !isPresent;
     }
+
     @Override
-    public Gen clone() throws CloneNotSupportedException {
-        Item item = super.clone();
-        Gen copy = new Gen(item.getWeight(), item.getValue());
-        copy.isPresent = this.isPresent;
-        return copy;
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

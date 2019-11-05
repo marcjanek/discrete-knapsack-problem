@@ -1,13 +1,25 @@
 package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 
 @Getter @RequiredArgsConstructor
-public class Population {
+public class Population implements Cloneable{
+    @NonNull
     private final Long number;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Population population = new Population(Objects.isNull(number) ? 0 : number + 1);
+        for (Chromosome chromosome : this.chromosomes) {
+            population.add((Chromosome) chromosome.clone());
+        }
+        return population;
+    }
+
     List<Chromosome> chromosomes = new ArrayList<>();
 
     public void add(Chromosome chromosome){
@@ -37,12 +49,12 @@ public class Population {
         Chromosome newChromosome1 = new Chromosome();
         Chromosome newChromosome2 = new Chromosome();
         for(long i = 0; i<crossoverPoint && i<chromosome1.size(); i++){
-            newChromosome1.add(chromosome1.getGen(i).clone());
-            newChromosome2.add(chromosome2.getGen(i).clone());
+            newChromosome1.add((Gen) chromosome1.getGen(i).clone());
+            newChromosome2.add((Gen) chromosome2.getGen(i).clone());
         }
         for(long i = Math.toIntExact(crossoverPoint); i<chromosome1.size(); i++){
-            newChromosome1.add(chromosome2.getGen(i).clone());
-            newChromosome2.add(chromosome1.getGen(i).clone());
+            newChromosome1.add((Gen) chromosome2.getGen(i).clone());
+            newChromosome2.add((Gen) chromosome1.getGen(i).clone());
         }
         return crossover;
     }

@@ -8,7 +8,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Getter
-public class InputKnapsackObjects {
+public class KnapsackObjects {
     private final Long knapsackCapacity;
     private final List<Item> items = new ArrayList<>();
 

@@ -9,8 +9,8 @@ class ItemTest {
 
     @Test
     void testClone() throws CloneNotSupportedException {
-        Gen gen = new Gen(1L,2L);
-        Gen copy = gen.clone();
-        assertNotSame(gen, copy);
+        Item item = new Item(1L,2L);
+        Object clone = item.clone();
+        assertNotSame(item, clone);
     }
 }

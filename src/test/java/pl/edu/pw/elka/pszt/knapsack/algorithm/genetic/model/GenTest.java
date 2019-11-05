@@ -9,7 +9,7 @@ class GenTest {
     @Test
     void testClone() throws CloneNotSupportedException {
         Gen gen = new Gen(1L,2L);
-        Gen clone = gen.clone();
+        Gen clone = (Gen) gen.clone();
         assertNotSame(gen,clone);
     }
 }

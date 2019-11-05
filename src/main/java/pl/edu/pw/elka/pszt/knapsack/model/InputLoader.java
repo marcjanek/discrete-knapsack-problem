@@ -12,16 +12,16 @@ import java.util.Scanner;
 public class InputLoader {
     private final String inputPath;
 
-    public InputKnapsackObjects load() throws IOException {
+    public KnapsackObjects load() throws IOException {
         String inputData = getDataFromFile();
         return setInputKnapsackObjects(inputData);
     }
 
-    private InputKnapsackObjects setInputKnapsackObjects(String inputData) throws IOException {
+    private KnapsackObjects setInputKnapsackObjects(String inputData) throws IOException {
         String[] lines = inputData.split("\n");
         if (lines.length == 0)
             throw new IOException("Data in input file can't be empty");
-        InputKnapsackObjects iko = new InputKnapsackObjects(getCapacity(lines[0]));
+        KnapsackObjects iko = new KnapsackObjects(getCapacity(lines[0]));
         for (int i = 1; i < lines.length; i++) {
             iko.add(getKnapsackObject(lines[i]));
         }

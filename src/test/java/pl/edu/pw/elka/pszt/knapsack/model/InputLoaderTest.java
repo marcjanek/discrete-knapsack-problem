@@ -48,7 +48,7 @@ class InputLoaderTest {
             test(loadFile(path).split("\n"), new InputLoader(path).load());
         }
 
-        void test(String[] split, InputKnapsackObjects iko) {
+        void test(String[] split, KnapsackObjects iko) {
             assertEquals(Long.parseLong(split[0]), iko.getKnapsackCapacity());
             assertEquals(split.length - 1, iko.getItems().size());
             List<Item> items = iko.getItems();

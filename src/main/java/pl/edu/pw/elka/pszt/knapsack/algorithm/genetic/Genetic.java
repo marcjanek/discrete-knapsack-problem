@@ -5,13 +5,13 @@ import pl.edu.pw.elka.pszt.knapsack.algorithm.Algorithm;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Chromosome;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Gen;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Population;
-import pl.edu.pw.elka.pszt.knapsack.model.InputKnapsackObjects;
+import pl.edu.pw.elka.pszt.knapsack.model.KnapsackObjects;
 
 import java.util.Random;
 
 @AllArgsConstructor
 public class Genetic implements Algorithm {
-    private final InputKnapsackObjects iko;
+    private final KnapsackObjects iko;
     @Override
     public String calculate() throws CloneNotSupportedException {
         Population population = getInitPopulation(iko.getItems().size());// FIXME: 29.10.2019 change to setting
@@ -35,7 +35,7 @@ public class Genetic implements Algorithm {
         Population population = new Population(0L);
         Chromosome chromosome = getInitChromosome();
         for (int i = 0; i < size; i++) {
-            population.add(chromosome.clone());
+            population.add((Chromosome) chromosome.clone());
         }
         randomizeGens(population);
         return population;
