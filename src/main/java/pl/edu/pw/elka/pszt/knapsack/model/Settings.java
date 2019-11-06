@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 @Getter @Setter
 public class Settings {
+    private double initialPopulation = 0;
     private double probability = 100;
     private double dominatorPercentage = 0.9;
     private double iterations = 100;

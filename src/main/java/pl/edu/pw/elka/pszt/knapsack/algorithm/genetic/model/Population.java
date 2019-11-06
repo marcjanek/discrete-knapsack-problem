@@ -9,7 +9,6 @@ import java.util.*;
 
 @Getter
 @RequiredArgsConstructor
-@ToString
 public class Population implements Cloneable {
     @NonNull
     private final Long number;
@@ -134,5 +133,18 @@ public class Population implements Cloneable {
                 .max()
                 .orElse(0);
         return (((100L * (double) frequency) / (double) chromosomes.size()));
+    }
+
+    public String toString()
+    {
+        StringBuilder text = new StringBuilder();
+        text.append("Population ").append(number).append(": ");
+        for (Chromosome chromosome : chromosomes) {
+            for (Gen gen : chromosome.gens) {
+                text.append(gen.toString());
+            }
+            text.append(" ");
+        }
+        return text.toString();
     }
 }
