@@ -9,7 +9,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 public class KnapsackObjects {
-    private final Long knapsackCapacity;
+    public final Long knapsackCapacity;
     private final List<Item> items = new ArrayList<>();
 
     public void add(Item item) {

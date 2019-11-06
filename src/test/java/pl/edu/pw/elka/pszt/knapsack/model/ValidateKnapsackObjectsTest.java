@@ -4,18 +4,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ValidateKnapsackObjectsTest {
     @Nested
-    class correctObjects{
+    class correctObjects {
         KnapsackObjects knapsackObjects;
+
         @BeforeEach
-        void init(){
+        void init() {
             knapsackObjects = new KnapsackObjects(10L);
             knapsackObjects.add(new Item(1L, 2L));
             knapsackObjects.add(new Item(3L, 4L));
-            knapsackObjects.add(new Item(100L,200L));
+            knapsackObjects.add(new Item(100L, 200L));
         }
 
         @Test
@@ -28,15 +30,17 @@ class ValidateKnapsackObjectsTest {
             assertTrue(ValidateKnapsackObjects.checkItems(knapsackObjects));
         }
     }
+
     @Nested
-    class incorrectObjects{
+    class incorrectObjects {
         KnapsackObjects knapsackObjects;
+
         @BeforeEach
-        void init(){
+        void init() {
             knapsackObjects = new KnapsackObjects(-10L);
             knapsackObjects.add(new Item(1L, -2L));
             knapsackObjects.add(new Item(3L, 4L));
-            knapsackObjects.add(new Item(100L,200L));
+            knapsackObjects.add(new Item(100L, 200L));
         }
 
         @Test

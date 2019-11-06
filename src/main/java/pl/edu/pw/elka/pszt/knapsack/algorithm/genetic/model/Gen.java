@@ -4,13 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.edu.pw.elka.pszt.knapsack.model.Item;
 
-@Getter @Setter
+@Getter
+@Setter
 public class Gen extends Item implements Cloneable {
     boolean isPresent = false;
+
     public Gen(Long weight, Long value) {
         super(weight, value);
     }
-    void negateIsPresent(){
+
+    void negateIsPresent() {
         isPresent = !isPresent;
     }
 

@@ -4,12 +4,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PopulationTest {
     @Nested
-    class Check
-    {
+    class Check {
         void check(Population population) throws CloneNotSupportedException {
             Population population1 = (Population) population.clone();
             population1.crossover();
@@ -25,7 +24,6 @@ class PopulationTest {
 
         @Test
         @DisplayName("crossoverforone")
-
         void testCrossover1() throws CloneNotSupportedException {
             Population population = new Population(1L);
             check(population);
@@ -33,7 +31,6 @@ class PopulationTest {
 
         @Test
         @DisplayName("crossoverfortwo")
-
         void testCrossover2() throws CloneNotSupportedException {
             Population population = new Population(2L);
             check(population);

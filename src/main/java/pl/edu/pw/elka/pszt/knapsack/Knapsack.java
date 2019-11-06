@@ -3,8 +3,8 @@ package pl.edu.pw.elka.pszt.knapsack;
 import lombok.AllArgsConstructor;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.Algorithm;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.Genetic;
-import pl.edu.pw.elka.pszt.knapsack.model.KnapsackObjects;
 import pl.edu.pw.elka.pszt.knapsack.model.InputLoader;
+import pl.edu.pw.elka.pszt.knapsack.model.KnapsackObjects;
 import pl.edu.pw.elka.pszt.knapsack.model.ValidateKnapsackObjects;
 
 import java.io.BufferedWriter;
