@@ -25,7 +25,7 @@ public class Genetic implements Algorithm {
         do{
             populations.add(population);
             population = population.cycle(iko.knapsackCapacity.intValue(), (int)settings.getProbability());
-        }while(population.dominatorPercentage() >= 90L && population.getNumber() >= settings.getIterations());
+        }while(population.getNumber() < settings.getIterations());
         return Arrays.toString(populations.toArray()) + "\n" + population.toString();
     }
 
