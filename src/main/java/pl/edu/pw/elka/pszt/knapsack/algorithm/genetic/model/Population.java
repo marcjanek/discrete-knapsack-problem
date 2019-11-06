@@ -87,7 +87,7 @@ public class Population implements Cloneable {
         }
     }
 
-    private void nextGeneration() {
+    private Population nextGeneration() {
         sort(children);
         sort(chromosomes);
         List<Chromosome> tmp = new ArrayList<>();
@@ -95,13 +95,18 @@ public class Population implements Cloneable {
         int i = 1;
         while (i < chromosomes.size()) {
             tmp.add(children.get(i - 1));
+            i++;
         }
         chromosomes = tmp;
-        parents.clear();
-        children.clear();
+        Population population = new Population(number + 1);
+        for (Chromosome chromosome : tmp)
+        {
+            population.add(chromosome);
+        }
+        return population;
     }
 
-    public void cycle(int maxWeight, int probability) throws CloneNotSupportedException {
+    public Population cycle(int maxWeight, int probability) throws CloneNotSupportedException {
         selectParents();
         crossover();
         for (Chromosome child : children)
@@ -113,7 +118,7 @@ public class Population implements Cloneable {
         {
             child.fix(maxWeight);
         }
-        nextGeneration();
+        return nextGeneration();
     }
 
     public double dominatorPercentage() {

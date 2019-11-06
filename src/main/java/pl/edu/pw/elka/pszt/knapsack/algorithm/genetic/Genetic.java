@@ -19,7 +19,7 @@ public class Genetic implements Algorithm {
         Population population = getInitPopulation(iko.getItems().size());// FIXME: 29.10.2019 change to setting
         fix(population);
         do{
-            population.cycle(iko.knapsackCapacity.intValue(), (int)settings.getProbability());
+            population = population.cycle(iko.knapsackCapacity.intValue(), (int)settings.getProbability());
         }while(population.dominatorPercentage() >= 90L && population.getNumber() >= 5);
         return population.toString();
     }
