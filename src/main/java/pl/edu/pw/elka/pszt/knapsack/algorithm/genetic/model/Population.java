@@ -3,11 +3,13 @@ package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import java.util.*;
 
 @Getter
 @RequiredArgsConstructor
+@ToString
 public class Population implements Cloneable {
     @NonNull
     private final Long number;
@@ -99,8 +101,7 @@ public class Population implements Cloneable {
         }
         chromosomes = tmp;
         Population population = new Population(number + 1);
-        for (Chromosome chromosome : tmp)
-        {
+        for (Chromosome chromosome : tmp) {
             population.add(chromosome);
         }
         return population;

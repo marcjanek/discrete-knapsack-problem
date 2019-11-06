@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 @Getter
+@ToString
 public class Chromosome implements Cloneable {
     List<Gen> gens = new ArrayList<>();
 
