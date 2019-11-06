@@ -5,6 +5,7 @@ import pl.edu.pw.elka.pszt.knapsack.algorithm.Algorithm;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.Genetic;
 import pl.edu.pw.elka.pszt.knapsack.model.KnapsackObjects;
 import pl.edu.pw.elka.pszt.knapsack.model.InputLoader;
+import pl.edu.pw.elka.pszt.knapsack.model.Settings;
 import pl.edu.pw.elka.pszt.knapsack.model.ValidateKnapsackObjects;
 
 import java.io.BufferedWriter;
@@ -14,14 +15,20 @@ import java.util.Arrays;
 
 @AllArgsConstructor
 public class Knapsack {
-    private final String inputPath, outputPath;
+    private final String inputPath, outputPath, settingsPath;
 
     public void run() throws IOException, CloneNotSupportedException {
         KnapsackObjects iko = loadInput();
-
+        Settings settings = loadSettings();
         validate(iko);
-        String result = calculate(iko);
+        String result = calculate(iko,settings);
         saveOutput(result);
+    }
+
+    private Settings loadSettings() {
+        Settings settings = new Settings();
+        settings.initDataFromFile(settingsPath);
+        return settings;
     }
 
     private KnapsackObjects loadInput() throws IOException {
@@ -36,8 +43,8 @@ public class Knapsack {
                     Arrays.toString(iko.getItems().toArray()));
     }
 
-    private String calculate(KnapsackObjects iko) throws CloneNotSupportedException {
-        Algorithm algorithm = new Genetic(iko);
+    private String calculate(KnapsackObjects iko, Settings settings) throws CloneNotSupportedException {
+        Algorithm algorithm = new Genetic(iko,settings);
         return algorithm.calculate();
     }
 

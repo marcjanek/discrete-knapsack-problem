@@ -6,12 +6,14 @@ import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Chromosome;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Gen;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Population;
 import pl.edu.pw.elka.pszt.knapsack.model.KnapsackObjects;
+import pl.edu.pw.elka.pszt.knapsack.model.Settings;
 
 import java.util.Random;
 
 @AllArgsConstructor
 public class Genetic implements Algorithm {
     private final KnapsackObjects iko;
+    private final Settings settings;
     @Override
     public String calculate() throws CloneNotSupportedException {
         Population population = getInitPopulation(iko.getItems().size());// FIXME: 29.10.2019 change to setting
