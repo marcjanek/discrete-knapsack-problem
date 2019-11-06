@@ -55,11 +55,11 @@ public class Chromosome implements Cloneable {
 
     public void fitness(int maxWeight) {
         Random random = new Random(System.currentTimeMillis());
-        while(weight()>maxWeight){
+        while (weight() > maxWeight) {
             Gen gen;
-            do{
-                 gen = this.gens.get(random.nextInt(this.size()));
-            }while (!gen.isPresent);
+            do {
+                gen = this.gens.get(random.nextInt(this.size()));
+            } while (!gen.isPresent);
             gen.negateIsPresent();
         }
     }

@@ -6,64 +6,121 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 
-@Getter @RequiredArgsConstructor
-public class Population implements Cloneable{
+@Getter
+@RequiredArgsConstructor
+public class Population implements Cloneable {
     @NonNull
     private final Long number;
+    private List<Chromosome> chromosomes = new ArrayList<>();
+    private List<Chromosome> parents = new ArrayList<>();
+    private List<Chromosome> children = new ArrayList<>();
 
     @Override
     public Object clone() throws CloneNotSupportedException {
         Object clone = super.clone();
         for (Chromosome chromosome : this.chromosomes) {
-            ((Population)clone).add((Chromosome) chromosome.clone());
+            ((Population) clone).add((Chromosome) chromosome.clone());
         }
         return clone;
     }
 
-    List<Chromosome> chromosomes = new ArrayList<>();
+    private void sort(List<Chromosome> list) {
+        list.sort((d1, d2) -> d2.score() - d1.score());
+    }
 
-    public void add(Chromosome chromosome){
+    public void add(Chromosome chromosome) {
         this.chromosomes.add(chromosome);
     }
-    public void addAll(List<Chromosome> list){
-        this.chromosomes.addAll(list);
+
+    private void crossover() throws CloneNotSupportedException {
+        for (int i = 0; i < parents.size(); i++) {
+            Chromosome mother = parents.get(i);
+            Chromosome father;
+            if (i == parents.size() - 1) father = parents.get(0);
+            else father = parents.get(i + 1);
+            cross(father, mother);
+        }
     }
 
-    public List<Chromosome> crossover(Long crossoverPoint) throws CloneNotSupportedException {
-        List<Chromosome> crossover = new ArrayList<>();
-        for (int i = 0; i < chromosomes.size() - 1; i++) {
-            crossover.addAll(crossover(crossoverPoint,chromosomes.get(i),chromosomes.get(i + 1)));
+    private void cross(Chromosome father, Chromosome mother) throws CloneNotSupportedException {
+        int random = new Random().nextInt(father.size() + 1);
+        Chromosome child = new Chromosome();
+        Chromosome child2 = new Chromosome();
+        Long i = 0L;
+        for (; i < random; i++) {
+            child.add((Gen) father.getGen(i).clone());
+            child2.add((Gen) mother.getGen(i).clone());
         }
-        if(chromosomes.size() >= 3)
-            crossover.addAll(crossover(crossoverPoint,chromosomes.get(chromosomes.size() -1 ),chromosomes.get(0)));
-        return crossover;
-    }
-    public void mutate(int seed){
-        List<Chromosome> result = new ArrayList<>();
-        Random random = new Random(seed);
-        this.chromosomes.forEach(e->e.mutate(random.nextInt()));
+        for (; i < father.size(); i++) {
+            child.add((Gen) mother.getGen(i).clone());
+            child.add((Gen) father.getGen(i).clone());
+        }
+        children.add(child);
+        children.add(child2);
     }
 
-    private List<Chromosome> crossover(Long crossoverPoint, Chromosome chromosome1, Chromosome chromosome2) throws CloneNotSupportedException {
-        List<Chromosome> crossover = new ArrayList<>();
-        Chromosome newChromosome1 = new Chromosome();
-        Chromosome newChromosome2 = new Chromosome();
-        for(long i = 0; i<crossoverPoint && i<chromosome1.size(); i++){
-            newChromosome1.add((Gen) chromosome1.getGen(i).clone());
-            newChromosome2.add((Gen) chromosome2.getGen(i).clone());
+    private void selectParents() {
+
+        int scoressum = 0;
+        for (Chromosome chromosome : chromosomes) {
+            scoressum += chromosome.score();
         }
-        for(long i = Math.toIntExact(crossoverPoint); i<chromosome1.size(); i++){
-            newChromosome1.add((Gen) chromosome2.getGen(i).clone());
-            newChromosome2.add((Gen) chromosome1.getGen(i).clone());
+        int random = new Random().nextInt(scoressum);
+        for (int i = 0; i < chromosomes.size(); i++) {
+            int sum = 0;
+            for (Chromosome chromosome : chromosomes) {
+                sum += chromosome.score();
+                if (sum >= random) {
+                    parents.add(chromosome);
+                    break;
+                }
+            }
         }
-        return crossover;
+    }
+
+    private void mutate(int probability) {
+        for (Chromosome chromosome : children) {
+            for (Gen gen : chromosome.gens) {
+                int random = new Random().nextInt(1000);
+                if (random <= probability) gen.negateIsPresent();
+            }
+        }
+    }
+
+    private void nextGeneration() {
+        sort(children);
+        sort(chromosomes);
+        List<Chromosome> tmp = new ArrayList<>();
+        tmp.add(chromosomes.get(0));
+        int i = 1;
+        while (i < chromosomes.size()) {
+            tmp.add(children.get(i - 1));
+        }
+        chromosomes = tmp;
+        parents.clear();
+        children.clear();
+    }
+
+    public void cycle(int maxWeight, int probability) throws CloneNotSupportedException {
+        selectParents();
+        crossover();
+        for (Chromosome child : children)
+        {
+            child.fitness(maxWeight);
+        }
+        mutate(probability);
+        for (Chromosome child : children)
+        {
+            child.fitness(maxWeight);
+        }
+        nextGeneration();
     }
 
     public double dominatorPercentage() {
-        Map<Integer,Integer> map = new HashMap<>();
+        Map<Integer, Integer> map = new HashMap<>();
         this.chromosomes.forEach(chromosome -> {
             int key = chromosome.score();
-            map.put(key,map.getOrDefault(key,0) + 1);
+            map.put(key, map.getOrDefault(key, 0) + 1);
         });
         int frequency = map.values()
                 .stream()
