@@ -4,7 +4,7 @@ import pl.edu.pw.elka.pszt.knapsack.Knapsack;
 
 import java.io.IOException;
 import java.util.Objects;
-// /src/main/resources/inputExample.txt /src/main/resources/out.txt /src/main/resources/settings.txt
+// src/main/resources/inputExample.txt src/main/resources/out.txt src/main/resources/settings.txt
 public class Application {
     private static final int NUMBER_OF_ARGS = 3;
     public static void main(String[] args) {
