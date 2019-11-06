@@ -25,7 +25,7 @@ public class Population implements Cloneable {
     }
 
     private void sort(List<Chromosome> list) {
-        list.sort((d1, d2) -> d2.score() - d1.score());
+        list.sort((d1, d2) -> d2.fitness() - d1.fitness());
     }
 
     public void add(Chromosome chromosome) {
@@ -63,13 +63,13 @@ public class Population implements Cloneable {
 
         int scoressum = 0;
         for (Chromosome chromosome : chromosomes) {
-            scoressum += chromosome.score();
+            scoressum += chromosome.fitness();
         }
         int random = new Random().nextInt(scoressum);
         for (int i = 0; i < chromosomes.size(); i++) {
             int sum = 0;
             for (Chromosome chromosome : chromosomes) {
-                sum += chromosome.score();
+                sum += chromosome.fitness();
                 if (sum >= random) {
                     parents.add(chromosome);
                     break;
@@ -106,12 +106,12 @@ public class Population implements Cloneable {
         crossover();
         for (Chromosome child : children)
         {
-            child.fitness(maxWeight);
+            child.fix(maxWeight);
         }
         mutate(probability);
         for (Chromosome child : children)
         {
-            child.fitness(maxWeight);
+            child.fix(maxWeight);
         }
         nextGeneration();
     }
@@ -119,7 +119,7 @@ public class Population implements Cloneable {
     public double dominatorPercentage() {
         Map<Integer, Integer> map = new HashMap<>();
         this.chromosomes.forEach(chromosome -> {
-            int key = chromosome.score();
+            int key = chromosome.fitness();
             map.put(key, map.getOrDefault(key, 0) + 1);
         });
         int frequency = map.values()

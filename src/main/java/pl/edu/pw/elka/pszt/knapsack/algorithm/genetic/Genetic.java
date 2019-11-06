@@ -17,20 +17,18 @@ public class Genetic implements Algorithm {
     @Override
     public String calculate() throws CloneNotSupportedException {
         Population population = getInitPopulation(iko.getItems().size());// FIXME: 29.10.2019 change to setting
+        fix(population);
         do{
-            fitness(population);
-            if(population.dominatorPercentage()>=90L){// FIXME: 29.10.2019 change to setting
-
-            }
-        }while(population.dominatorPercentage() >= 90L && population.getNumber() >= 5);// FIXME: 29.10.2019 change to setting
+            population.cycle(iko.knapsackCapacity.intValue(), (int)settings.getProbability());
+        }while(population.dominatorPercentage() >= 90L && population.getNumber() >= 5);
         return population.toString();
     }
 
-    private void fitness(Population population) {
+    private void fix(Population population) {
         population.getChromosomes()
                 .stream()
                 .filter(e->e.weight()>iko.getKnapsackCapacity())
-                .forEach(chromosome -> chromosome.fitness(iko.getKnapsackCapacity().intValue()));// FIXME: 29.10.2019 change to setting
+                .forEach(chromosome -> chromosome.fix(iko.getKnapsackCapacity().intValue()));
     }
 
     private Population getInitPopulation(int size) throws CloneNotSupportedException {
