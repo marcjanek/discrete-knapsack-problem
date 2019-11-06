@@ -13,11 +13,11 @@ public class Population implements Cloneable{
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Population population = new Population(Objects.isNull(number) ? 0 : number + 1);
+        Object clone = super.clone();
         for (Chromosome chromosome : this.chromosomes) {
-            population.add((Chromosome) chromosome.clone());
+            ((Population)clone).add((Chromosome) chromosome.clone());
         }
-        return population;
+        return clone;
     }
 
     List<Chromosome> chromosomes = new ArrayList<>();
@@ -61,16 +61,15 @@ public class Population implements Cloneable{
 
     public double dominatorPercentage() {
         Map<Integer,Integer> map = new HashMap<>();
-        int freqency;
         this.chromosomes.forEach(chromosome -> {
             int key = chromosome.score();
             map.put(key,map.getOrDefault(key,0) + 1);
         });
-        freqency = map.values()
+        int frequency = map.values()
                 .stream()
                 .mapToInt(value -> value)
                 .max()
                 .orElse(0);
-        return (((100L * (double) freqency) / (double) chromosomes.size()));
+        return (((100L * (double) frequency) / (double) chromosomes.size()));
     }
 }

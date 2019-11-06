@@ -42,9 +42,8 @@ public class Genetic implements Algorithm {
     }
     private void randomizeGens(Population population){
         Random random = new Random(System.currentTimeMillis());
-        population.getChromosomes().forEach(chromosome->{
-            chromosome.getGens().forEach(gen -> gen.setIsPresent(random.nextBoolean()));
-        });
+        population.getChromosomes().forEach(chromosome->
+                chromosome.getGens().forEach(gen -> gen.setPresent(random.nextBoolean())));
     }
     private Chromosome getInitChromosome(){
         Chromosome chromosome = new Chromosome();

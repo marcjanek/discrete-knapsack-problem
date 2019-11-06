@@ -47,10 +47,10 @@ public class Chromosome implements Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Chromosome chromosome = new Chromosome();
-        for (Gen e : this.gens)
-            chromosome.add((Gen) e.clone());
-        return chromosome;
+        Object clone = super.clone();
+        for (Gen gen : this.gens)
+            ((Chromosome)clone).add((Gen) gen.clone());
+        return clone;
     }
 
     public void fitness(int maxWeight) {

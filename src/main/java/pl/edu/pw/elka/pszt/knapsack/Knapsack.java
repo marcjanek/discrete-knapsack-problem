@@ -28,9 +28,9 @@ public class Knapsack {
     }
 
     private void validate(KnapsackObjects iko) throws IOException {
-        if (ValidateKnapsackObjects.checkCapacity(iko))
+        if (!ValidateKnapsackObjects.checkCapacity(iko))
             throw new IOException("Error in capacity. Capacity must be integer >= 0, but is: " + iko.getKnapsackCapacity());
-        if (ValidateKnapsackObjects.checkItems(iko))
+        if (!ValidateKnapsackObjects.checkItems(iko))
             throw new IOException("Error in items. Value and weight for each item must be integer. All items: " +
                     Arrays.toString(iko.getItems().toArray()));
     }

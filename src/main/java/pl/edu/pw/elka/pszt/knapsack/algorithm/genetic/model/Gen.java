@@ -6,7 +6,7 @@ import pl.edu.pw.elka.pszt.knapsack.model.Item;
 
 @Getter @Setter
 public class Gen extends Item implements Cloneable {
-    Boolean isPresent = false;
+    boolean isPresent = false;
     public Gen(Long weight, Long value) {
         super(weight, value);
     }
