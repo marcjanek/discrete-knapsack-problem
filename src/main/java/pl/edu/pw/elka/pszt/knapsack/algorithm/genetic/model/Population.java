@@ -24,6 +24,10 @@ public class Population implements Cloneable{
     private List<Chromosome> parents = new ArrayList<>();
     private List<Chromosome> children = new ArrayList<>();
 
+    private void sort(List<Chromosome> list){
+        list.sort((d1, d2) -> d2.score() - d1.score());
+    }
+
     public void add(Chromosome chromosome){
         this.chromosomes.add(chromosome);
     }
