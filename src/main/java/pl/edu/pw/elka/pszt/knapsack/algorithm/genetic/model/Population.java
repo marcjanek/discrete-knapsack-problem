@@ -55,7 +55,7 @@ public class Population implements Cloneable {
         }
         for (; i < father.size(); i++) {
             child.add((Gen) mother.getGen(i).clone());
-            child.add((Gen) father.getGen(i).clone());
+            child2.add((Gen) father.getGen(i).clone());
         }
         children.add(child);
         children.add(child2);
