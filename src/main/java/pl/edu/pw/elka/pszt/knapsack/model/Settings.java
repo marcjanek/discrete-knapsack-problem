@@ -9,7 +9,8 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 @Getter @Setter
-public class Settings {
+public class Settings extends FileGetter{
+    private double initialPopulation = 0;
     private double probability = 100;
     private double dominatorPercentage = 0.9;
     private double iterations = 100;
@@ -44,18 +45,9 @@ public class Settings {
             case "iterations":
                 iterations= val;
                 break;
+            case "initialPopulation":
+                initialPopulation = val;
+                break;
         }
-    }
-
-    private String getDataFromFile(String inputPath) throws FileNotFoundException {
-        Scanner scanner = new Scanner(getFile(inputPath));
-        StringBuilder stringBuilder = new StringBuilder();
-        while (scanner.hasNextLine())
-            stringBuilder.append(scanner.nextLine()).append("\n");
-        scanner.close();
-        return stringBuilder.toString();
-    }
-    private File getFile(String inputPath){
-        return new File(inputPath);
     }
 }

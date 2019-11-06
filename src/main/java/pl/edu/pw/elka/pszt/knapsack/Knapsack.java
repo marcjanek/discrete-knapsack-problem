@@ -20,6 +20,9 @@ public class Knapsack {
     public void run() throws IOException, CloneNotSupportedException {
         KnapsackObjects iko = loadInput();
         Settings settings = loadSettings();
+        settings.setInitialPopulation(
+                settings.getInitialPopulation() == 0 ? iko.getItems().size() : settings.getInitialPopulation()
+        );
         validate(iko);
         String result = calculate(iko,settings);
         saveOutput(result);

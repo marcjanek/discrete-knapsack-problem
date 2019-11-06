@@ -1,3 +1,4 @@
 probability = 4
 dominatorPercentage = 0.8
 iterations = 20
+initialPopulation = 10
