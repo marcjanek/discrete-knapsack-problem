@@ -27,7 +27,7 @@ public class Chromosome implements Cloneable {
         gens.get(index % size()).negateIsPresent();
     }
 
-    public int score() {
+    public int fitness() {
         return getPresentGens().stream()
                 .mapToInt(e -> Math.toIntExact(e.getValue()))
                 .sum();
@@ -53,13 +53,12 @@ public class Chromosome implements Cloneable {
         return chromosome;
     }
 
-    public void fitness(int maxWeight) {
+    public void fix(final int maxWeight) {
         Random random = new Random(System.currentTimeMillis());
-        while (weight() > maxWeight) {
-            Gen gen;
-            do {
-                gen = this.gens.get(random.nextInt(this.size()));
-            } while (!gen.isPresent);
+        List<Gen> collect = this.gens.stream().filter(Gen::isPresent).collect(Collectors.toList());
+        while (weight() > maxWeight && collect.size() > 0) {
+            Gen gen = collect.get(random.nextInt(collect.size()));
+            collect.remove(gen);
             gen.negateIsPresent();
         }
     }
