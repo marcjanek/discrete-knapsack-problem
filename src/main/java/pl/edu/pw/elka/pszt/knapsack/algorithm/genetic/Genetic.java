@@ -20,13 +20,17 @@ public class Genetic implements Algorithm {
     @Override
     public String calculate() throws CloneNotSupportedException {
         List<Population> populations = new ArrayList<>();
-        Population population = getInitPopulation(iko.getItems().size());// FIXME: 29.10.2019 change to setting
+        Population population = getInitPopulation((int)settings.getInitialPopulation());
         fix(population);
         do{
             populations.add(population);
             population = population.cycle(iko.knapsackCapacity.intValue(), (int)settings.getProbability());
         }while(population.getNumber() < settings.getIterations());
-        return Arrays.toString(populations.toArray()) + "\n" + population.toString();
+        StringBuilder text = new StringBuilder();
+        for (Population population1 : populations) {
+            text.append(population1.toString()).append("\n");
+        }
+        return text.toString();
     }
 
     private void fix(Population population) {
