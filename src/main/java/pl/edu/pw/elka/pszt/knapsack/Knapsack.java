@@ -18,6 +18,7 @@ public class Knapsack {
 
     public void run() throws IOException, CloneNotSupportedException {
         KnapsackObjects iko = loadInput();
+
         validate(iko);
         String result = calculate(iko);
         saveOutput(result);
