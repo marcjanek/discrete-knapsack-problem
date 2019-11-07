@@ -3,6 +3,7 @@ package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import java.util.*;
 
@@ -63,6 +64,12 @@ public class Population implements Cloneable {
     }
 
     private void selectParents() {
+        if(chromosomes.size() == 0) return;
+        int scoressum = 0;
+        for (Chromosome chromosome : chromosomes) {
+            scoressum += chromosome.fitness();
+        }
+        int random = new Random().nextInt(scoressum);
         //ToDo: same parent??
 
         int scoresSum = chromosomes.stream().mapToInt(Chromosome::fitness).sum();
@@ -91,6 +98,7 @@ public class Population implements Cloneable {
     }
 
     private Population nextGeneration() {
+        if(chromosomes.size() == 0) return null;
         sort(children);
         sort(chromosomes);
         List<Chromosome> tmp = new ArrayList<>();
@@ -137,7 +145,7 @@ public class Population implements Cloneable {
     public String toString()
     {
         StringBuilder text = new StringBuilder();
-        text.append("Population ").append(number).append(": ");
+        text.append("Population ").append(number + 1).append(": ");
         for (Chromosome chromosome : chromosomes) {
             for (Gen gen : chromosome.gens) {
                 text.append(gen.toString());
@@ -145,5 +153,11 @@ public class Population implements Cloneable {
             text.append(" ");
         }
         return text.toString();
+    }
+
+    public String bestFound()
+    {
+        sort(chromosomes);
+        return "Best found: " + chromosomes.get(0).toString() + " Fitness: " + chromosomes.get(0).fitness() + " Weight: " + chromosomes.get(0).weight();
     }
 }

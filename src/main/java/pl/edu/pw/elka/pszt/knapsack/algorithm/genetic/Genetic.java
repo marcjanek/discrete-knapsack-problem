@@ -9,6 +9,7 @@ import pl.edu.pw.elka.pszt.knapsack.model.KnapsackObjects;
 import pl.edu.pw.elka.pszt.knapsack.model.Settings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -18,17 +19,14 @@ public class Genetic implements Algorithm {
     private final Settings settings;
     @Override
     public String calculate() throws CloneNotSupportedException {
-        List<Population> populations = new ArrayList<>();
         Population population = getInitPopulation((int)settings.getInitialPopulation());
+        StringBuilder text = new StringBuilder();
         fix(population);
         do{
-            populations.add(population);
+            text.append(population.toString()).append("\n");
             population = population.cycle(iko.knapsackCapacity.intValue(), (int)settings.getProbability());
-        } while (population.getNumber() < settings.getIterations() || population.dominatorPercentage() < settings.getDominatorPercentage());
-        StringBuilder text = new StringBuilder();
-        for (Population population1 : populations) {
-            text.append(population1.toString()).append("\n");
-        }
+        }while(population.getNumber() < settings.getIterations());
+        text.append("result:").append("\n").append(population.toString()).append("\n").append(population.bestFound()).append("\n");
         return text.toString();
     }
 
