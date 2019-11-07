@@ -3,7 +3,6 @@ package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 import java.util.*;
 
@@ -65,11 +64,6 @@ public class Population implements Cloneable {
 
     private void selectParents() {
         if(chromosomes.size() == 0) return;
-        int scoressum = 0;
-        for (Chromosome chromosome : chromosomes) {
-            scoressum += chromosome.fitness();
-        }
-        int random = new Random().nextInt(scoressum);
         //ToDo: same parent??
 
         int scoresSum = chromosomes.stream().mapToInt(Chromosome::fitness).sum();
