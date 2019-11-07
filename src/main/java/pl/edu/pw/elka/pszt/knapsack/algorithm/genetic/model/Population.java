@@ -3,7 +3,6 @@ package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 import java.util.*;
 
@@ -25,14 +24,17 @@ public class Population implements Cloneable {
         return clone;
     }
 
-    private void sort(List<Chromosome> list) {
-        list.sort((d1, d2) -> d2.fitness() - d1.fitness());
-    }
-
     public void add(Chromosome chromosome) {
         this.chromosomes.add(chromosome);
     }
 
+    public void addAll(List<Chromosome> chromosomes) {
+        this.chromosomes.addAll(chromosomes);
+    }
+
+    private void sort(List<Chromosome> list) {
+        list.sort((d1, d2) -> d2.fitness() - d1.fitness());
+    }
     private void crossover() throws CloneNotSupportedException {
         for (int i = 0; i < parents.size(); i++) {
             Chromosome mother = parents.get(i);
@@ -61,12 +63,11 @@ public class Population implements Cloneable {
     }
 
     private void selectParents() {
+        //ToDo: same parent??
 
-        int scoressum = 0;
-        for (Chromosome chromosome : chromosomes) {
-            scoressum += chromosome.fitness();
-        }
-        int random = new Random().nextInt(scoressum);
+        int scoresSum = chromosomes.stream().mapToInt(Chromosome::fitness).sum();
+        int random = new Random().nextInt(scoresSum);
+        //ToDo: ?????
         for (int i = 0; i < chromosomes.size(); i++) {
             int sum = 0;
             for (Chromosome chromosome : chromosomes) {
@@ -79,43 +80,41 @@ public class Population implements Cloneable {
         }
     }
 
-    private void mutate(int probability) {
-        for (Chromosome chromosome : children) {
-            for (Gen gen : chromosome.gens) {
-                int random = new Random().nextInt(1000);
-                if (random <= probability) gen.negateIsPresent();
+    private void mutate(final int probability) {
+        final Random random = new Random();
+        children.forEach(chromosome -> chromosome.gens.forEach(gen -> {
+            int randomNumber = random.nextInt(1000);
+            if (randomNumber <= probability) {
+                gen.negateIsPresent();
             }
-        }
+        }));
     }
 
     private Population nextGeneration() {
         sort(children);
         sort(chromosomes);
         List<Chromosome> tmp = new ArrayList<>();
-        tmp.add(chromosomes.get(0));
+        tmp.add(chromosomes.get(0));//ToDo: ??????
         int i = 1;
         while (i < chromosomes.size()) {
             tmp.add(children.get(i - 1));
             i++;
         }
         chromosomes = tmp;
-        Population population = new Population(number + 1);
-        for (Chromosome chromosome : tmp) {
-            population.add(chromosome);
-        }
-        return population;
+        Population newPopulation = new Population(this.number + 1);
+        newPopulation.addAll(tmp);
+        return newPopulation;
     }
 
     public Population cycle(int maxWeight, int probability) throws CloneNotSupportedException {
+        //ToDo: chromosomes are not cloned
         selectParents();
         crossover();
-        for (Chromosome child : children)
-        {
+        for (Chromosome child : children) {
             child.fix(maxWeight);
         }
         mutate(probability);
-        for (Chromosome child : children)
-        {
+        for (Chromosome child : children) {
             child.fix(maxWeight);
         }
         return nextGeneration();

@@ -2,7 +2,6 @@ package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import pl.edu.pw.elka.pszt.knapsack.model.Item;
 
 @Getter

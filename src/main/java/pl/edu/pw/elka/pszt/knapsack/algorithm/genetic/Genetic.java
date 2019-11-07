@@ -9,7 +9,6 @@ import pl.edu.pw.elka.pszt.knapsack.model.KnapsackObjects;
 import pl.edu.pw.elka.pszt.knapsack.model.Settings;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -25,7 +24,7 @@ public class Genetic implements Algorithm {
         do{
             populations.add(population);
             population = population.cycle(iko.knapsackCapacity.intValue(), (int)settings.getProbability());
-        }while(population.getNumber() < settings.getIterations());
+        } while (population.getNumber() < settings.getIterations() || population.dominatorPercentage() < settings.getDominatorPercentage());
         StringBuilder text = new StringBuilder();
         for (Population population1 : populations) {
             text.append(population1.toString()).append("\n");

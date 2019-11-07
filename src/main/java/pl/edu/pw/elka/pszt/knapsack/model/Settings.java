@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 @Getter @Setter
 public class Settings extends FileGetter{

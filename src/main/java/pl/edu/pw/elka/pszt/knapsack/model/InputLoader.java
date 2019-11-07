@@ -3,10 +3,7 @@ package pl.edu.pw.elka.pszt.knapsack.model;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
 
 @AllArgsConstructor
 public class InputLoader extends FileGetter {

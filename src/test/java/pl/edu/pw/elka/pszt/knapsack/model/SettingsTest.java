@@ -5,32 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
-import java.util.Scanner;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SettingsTest {
 
-    @Test
-    void initDataFromFile() {
-    }
-
     private final String PATH = "src/test/resources/pl.edu.pw.elka.pszt.knapsack.model/settings/";
 
-    String loadFile(String path) throws FileNotFoundException {
-        Scanner scanner = new Scanner(new File(path));
-        StringBuilder stringBuilder = new StringBuilder();
-        while (scanner.hasNextLine())
-            stringBuilder.append(scanner.nextLine()).append("\n");
-        scanner.close();
-        return stringBuilder.toString();
-    }
-
-    Settings settings;
+    private Settings settings;
     @BeforeEach
     void init(){
         settings = new Settings();
