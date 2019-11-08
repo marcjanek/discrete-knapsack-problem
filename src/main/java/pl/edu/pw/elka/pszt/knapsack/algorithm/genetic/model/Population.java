@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor
@@ -30,6 +31,55 @@ public class Population implements Cloneable {
 
     public void addAll(List<Chromosome> chromosomes) {
         this.chromosomes.addAll(chromosomes);
+    }
+
+
+
+    public Population cycle(int maxWeight, int probability) throws CloneNotSupportedException {
+        selectParents();
+        crossover();
+        fix(children, maxWeight);
+        mutate(probability);
+        fix(children, maxWeight);
+        return nextGeneration();
+    }
+
+
+    public double dominatorPercentage() {
+        Map<Integer, Integer> map = new HashMap<>();
+        this.chromosomes.forEach(chromosome -> {
+            int key = chromosome.fitness();
+            map.put(key, map.getOrDefault(key, 0) + 1);
+        });
+        int frequency = map.values()
+                .stream()
+                .mapToInt(value -> value)
+                .max()
+                .orElse(0);
+        return (((100L * (double) frequency) / (double) chromosomes.size()));
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder text = new StringBuilder();
+        text.append("Population ").append(String.format("%5s", number + 1)).append(": ");
+        for (Chromosome chromosome : chromosomes) {
+            for (Gen gen : chromosome.gens) {
+                text.append(gen.toString());
+            }
+            text.append(" ");
+        }
+        return text.toString();
+    }
+
+    public String bestFound()
+    {
+        sort(chromosomes);
+        return "Best found: " + chromosomes.get(0).toString() + " Fitness: " + chromosomes.get(0).fitness() + " Weight: " + chromosomes.get(0).weight();
+    }
+
+    private void fix(List<Chromosome> list, int maxWeight) {
+        list.forEach(chromosome -> chromosome.fix(maxWeight));
     }
 
     private void sort(List<Chromosome> list) {
@@ -64,7 +114,7 @@ public class Population implements Cloneable {
     }
 
     private void selectParents() {
-        if(chromosomes.size() == 0) return;
+        if (chromosomes.size() == 0) return;
         //ToDo: same parent??
 
         int scoresSum = chromosomes.stream().mapToInt(Chromosome::fitness).sum();
@@ -93,66 +143,12 @@ public class Population implements Cloneable {
     }
 
     private Population nextGeneration() {
-        if(chromosomes.size() == 0) return null;
+        if (chromosomes.size() == 0) return null;
         sort(children);
         sort(chromosomes);
-        List<Chromosome> tmp = new ArrayList<>();
-        tmp.add(chromosomes.get(0));//ToDo: ??????
-        int i = 1;
-        while (i < chromosomes.size()) {
-            tmp.add(children.get(i - 1));
-            i++;
-        }
-        chromosomes = tmp;
         Population newPopulation = new Population(this.number + 1);
-        newPopulation.addAll(tmp);
+        newPopulation.add(chromosomes.get(0));
+        newPopulation.addAll(children.stream().limit(chromosomes.size() - 1).collect(Collectors.toList()));
         return newPopulation;
-    }
-
-    public Population cycle(int maxWeight, int probability) throws CloneNotSupportedException {
-        //ToDo: chromosomes are not cloned
-        selectParents();
-        crossover();
-        for (Chromosome child : children) {
-            child.fix(maxWeight);
-        }
-        mutate(probability);
-        for (Chromosome child : children) {
-            child.fix(maxWeight);
-        }
-        return nextGeneration();
-    }
-
-    public double dominatorPercentage() {
-        Map<Integer, Integer> map = new HashMap<>();
-        this.chromosomes.forEach(chromosome -> {
-            int key = chromosome.fitness();
-            map.put(key, map.getOrDefault(key, 0) + 1);
-        });
-        int frequency = map.values()
-                .stream()
-                .mapToInt(value -> value)
-                .max()
-                .orElse(0);
-        return (((100L * (double) frequency) / (double) chromosomes.size()));
-    }
-
-    public String toString()
-    {
-        StringBuilder text = new StringBuilder();
-        text.append("Population ").append(number + 1).append(": ");
-        for (Chromosome chromosome : chromosomes) {
-            for (Gen gen : chromosome.gens) {
-                text.append(gen.toString());
-            }
-            text.append(" ");
-        }
-        return text.toString();
-    }
-
-    public String bestFound()
-    {
-        sort(chromosomes);
-        return "Best found: " + chromosomes.get(0).toString() + " Fitness: " + chromosomes.get(0).fitness() + " Weight: " + chromosomes.get(0).weight();
     }
 }
