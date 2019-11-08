@@ -32,12 +32,14 @@ public class Chart extends JFrame {
 
         xySeriesCollection.addSeries(createSeries("average",
                 populations.stream()
+                        .filter(e -> e.getNumber() % (populations.size() / 100) == 0)
                         .map(e -> new Point(e.getNumber().intValue(),
                                 (int) e.getAverageScore())).collect(Collectors.toList())
                 )
         );
         xySeriesCollection.addSeries(createSeries("max",
                 populations.stream()
+                        .filter(e -> e.getNumber() % (populations.size() / 100) == 0)
                         .map(e -> new Point(e.getNumber().intValue(),
                                 (int) e.getMaxScore())).collect(Collectors.toList())
                 )
@@ -45,6 +47,7 @@ public class Chart extends JFrame {
 
         xySeriesCollection.addSeries(createSeries("min",
                 populations.stream()
+                        .filter(e -> e.getNumber() % (populations.size() / 100) == 0)
                         .map(e -> new Point(e.getNumber().intValue(),
                                 (int) e.getMinScore())).collect(Collectors.toList())
                 )
@@ -101,8 +104,6 @@ public class Chart extends JFrame {
                         new Font("Serif", java.awt.Font.BOLD, 18)
                 )
         );
-
         return chart;
-
     }
 }

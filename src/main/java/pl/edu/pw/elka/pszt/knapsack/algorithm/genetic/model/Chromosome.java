@@ -13,15 +13,15 @@ import java.util.stream.Collectors;
 @ToString
 @EqualsAndHashCode
 public class Chromosome implements Cloneable {
-    List<Gen> gens = new ArrayList<>();
+    final List<Gen> gens = new ArrayList<>();
 
     public void add(Gen gen) {
         gens.add(gen);
     }
 
-    public int weight() {
+    public int volume() {
         return getPresentGens().stream()
-                .mapToInt(e -> Math.toIntExact(e.getWeight()))
+                .mapToInt(e -> Math.toIntExact(e.getVolume()))
                 .sum();
     }
 
@@ -33,10 +33,10 @@ public class Chromosome implements Cloneable {
         return chromosome;
     }
 
-    public void fix(final int maxWeight) {
+    public void fix(final int maxVolume) {
         Random random = new Random(System.currentTimeMillis());
         List<Gen> presentGens = this.gens.stream().filter(Gen::isPresent).collect(Collectors.toList());
-        while (weight() > maxWeight && presentGens.size() > 0) {
+        while (volume() > maxVolume && presentGens.size() > 0) {
             Gen gen = presentGens.get(random.nextInt(presentGens.size()));
             gen.negateIsPresent();
             presentGens.remove(gen);
@@ -63,7 +63,7 @@ public class Chromosome implements Cloneable {
 
     private List<Gen> getPresentGens() {
         return gens.stream()
-                .filter(e -> e.isPresent)
+                .filter(Gen::isPresent)
                 .collect(Collectors.toList());
     }
 }

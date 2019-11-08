@@ -4,7 +4,10 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Getter
@@ -12,9 +15,9 @@ import java.util.stream.Collectors;
 public class Population implements Cloneable {
     @NonNull
     private final Long number;
-    private List<Chromosome> chromosomes = new ArrayList<>();
-    private List<Chromosome> parents = new ArrayList<>();
-    private List<Chromosome> children = new ArrayList<>();
+    private final List<Chromosome> chromosomes = new ArrayList<>();
+    private final List<Chromosome> parents = new ArrayList<>();
+    private final List<Chromosome> children = new ArrayList<>();
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -29,26 +32,32 @@ public class Population implements Cloneable {
         this.chromosomes.add(chromosome);
     }
 
-    public double getAverageScore() {
-        return this.chromosomes.stream().mapToDouble(Chromosome::fitness).sum() / this.chromosomes.size();
-    }
-    public Population cycle(int maxWeight, int probability) throws CloneNotSupportedException {
+
+    public Population cycle(int maxVolume, int probability) throws CloneNotSupportedException {
         selectParents();
         crossover();
-        fix(children, maxWeight);
+        fix(children, maxVolume);
         mutate(probability);
-        fix(children, maxWeight);
+        fix(children, maxVolume);
         return nextGeneration();
     }
 
+    public double getAverageScore() {
+        return this.chromosomes.stream().mapToDouble(Chromosome::fitness).sum() / this.chromosomes.size();
+    }
+
     public double getMaxScore() {
-        Chromosome chromosome = chromosomes.stream().max(Comparator.comparingInt(Chromosome::fitness)).orElseGet(null);
-        return Objects.nonNull(chromosome) ? chromosome.fitness() : 0;
+        return chromosomes.stream()
+                .max(Comparator.comparingInt(Chromosome::fitness))
+                .orElse(new Chromosome())
+                .fitness();
     }
 
     public double getMinScore() {
-        Chromosome chromosome = chromosomes.stream().min(Comparator.comparingInt(Chromosome::fitness)).orElseGet(null);
-        return Objects.nonNull(chromosome) ? chromosome.fitness() : 0;
+        return chromosomes.stream()
+                .min(Comparator.comparingInt(Chromosome::fitness))
+                .orElse(new Chromosome())
+                .fitness();
     }
 
     public double dominatorPercentage() {
@@ -63,7 +72,8 @@ public class Population implements Cloneable {
                 count++;
             }
         }
-        return (double) count*100/chromosomes.size();
+        final double v = (double) count * 100 / chromosomes.size();
+        return v;
     }
 
     @Override
@@ -82,11 +92,15 @@ public class Population implements Cloneable {
     public String bestFound()
     {
         sort(chromosomes);
-        return "Best found: " + chromosomes.get(0).toString() + " Fitness: " + chromosomes.get(0).fitness() + " Weight: " + chromosomes.get(0).weight();
+        return "Best found: " + chromosomes.get(0).toString() + " Fitness: " + chromosomes.get(0).fitness() + " Volume: " + chromosomes.get(0).volume();
     }
 
-    private void fix(List<Chromosome> list, int maxWeight) {
-        list.forEach(chromosome -> chromosome.fix(maxWeight));
+    public void fixChromosomes(int volume) {
+        fix(this.chromosomes, volume);
+    }
+
+    private void fix(List<Chromosome> list, int maxVolume) {
+        list.forEach(chromosome -> chromosome.fix(maxVolume));
     }
 
     private void sort(List<Chromosome> list) {
@@ -121,19 +135,22 @@ public class Population implements Cloneable {
     }
 
     private void selectParents() {
-        if (chromosomes.size() == 0) return;
+        if (chromosomes.size() == 0)
+            return;
         int scoresSum = chromosomes.stream().mapToInt(Chromosome::fitness).sum();       //roulette wheel
-        for (int i = 0; i < chromosomes.size(); i++) {
+        if (scoresSum == 0)
+            return;
+        chromosomes.forEach(chromosome -> {
             int random = new Random().nextInt(scoresSum);
             int sum = 0;
-            for (Chromosome chromosome : chromosomes) {
-                sum += chromosome.fitness();
+            for (Chromosome chromosome1 : chromosomes) {
+                sum += chromosome1.fitness();
                 if (sum >= random) {
-                    parents.add(chromosome);
+                    parents.add(chromosome1);
                     break;
                 }
             }
-        }
+        });
     }
 
     private void mutate(final int probability) {

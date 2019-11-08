@@ -11,10 +11,9 @@ import pl.edu.pw.elka.pszt.knapsack.model.Item;
 public class Gen extends Item implements Cloneable {
     boolean isPresent = false;
 
-    public Gen(Long weight, Long value) {
-        super(weight, value);
+    public Gen(Long volume, Long value) {
+        super(volume, value);
     }
-
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();

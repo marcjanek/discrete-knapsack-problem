@@ -17,16 +17,15 @@ import java.util.Random;
 public class Genetic implements Algorithm {
     @Getter
     public  List<Population> oldPopulations;
-    private final KnapsackObjects iko;
+    private final KnapsackObjects knapsackObjects;
     private final Settings settings;
     @Override
     public String calculate() throws CloneNotSupportedException {
         Population population = getInitPopulation((int)settings.getInitialPopulation());
         oldPopulations = new ArrayList<>();
-        fix(population);
         do{
             oldPopulations.add(population);
-            population = population.cycle(iko.knapsackCapacity.intValue(), (int)settings.getProbability());
+            population = population.cycle(knapsackObjects.getKnapsackCapacity().intValue(), (int) settings.getProbability());
         } while (population.getNumber() < settings.getIterations() ||
                 population.dominatorPercentage() < settings.getDominatorPercentage());
         oldPopulations.add(population);
@@ -48,13 +47,6 @@ public class Genetic implements Algorithm {
         return text.toString();
     }
 
-    private void fix(Population population) {
-        population.getChromosomes()
-                .stream()
-                .filter(e->e.weight()>iko.getKnapsackCapacity())
-                .forEach(chromosome -> chromosome.fix(iko.getKnapsackCapacity().intValue()));
-    }
-
     private Population getInitPopulation(int size) throws CloneNotSupportedException {
         Population population = new Population(0L);
         Chromosome chromosome = getInitChromosome();
@@ -62,6 +54,7 @@ public class Genetic implements Algorithm {
             population.add((Chromosome) chromosome.clone());
         }
         randomizeGens(population);
+        population.fixChromosomes(Math.toIntExact(knapsackObjects.getKnapsackCapacity()));
         return population;
     }
     private void randomizeGens(Population population){
@@ -71,7 +64,7 @@ public class Genetic implements Algorithm {
     }
     private Chromosome getInitChromosome(){
         Chromosome chromosome = new Chromosome();
-        iko.getItems().forEach(e->chromosome.add(new Gen(e.getWeight(),e.getValue())));
+        knapsackObjects.getItems().forEach(e -> chromosome.add(new Gen(e.getVolume(), e.getValue())));
         return chromosome;
     }
 }
