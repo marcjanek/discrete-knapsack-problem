@@ -108,8 +108,8 @@ public class Population implements Cloneable {
         if (chromosomes.size() == 0) return;
 
         int scoresSum = chromosomes.stream().mapToInt(Chromosome::fitness).sum();       //roulette wheel
-        int random = new Random().nextInt(scoresSum);
         for (int i = 0; i < chromosomes.size(); i++) {
+            int random = new Random().nextInt(scoresSum);
             int sum = 0;
             for (Chromosome chromosome : chromosomes) {
                 sum += chromosome.fitness();
