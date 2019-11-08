@@ -10,7 +10,7 @@ import java.util.Objects;
 @Getter @Setter
 public class Settings extends FileGetter{
     private double initialPopulation = 0;
-    private double probability = 100;
+    private double probability = 30;
     private double dominatorPercentage = 90;
     private double iterations = 100;
     private double generateChart = 1;

@@ -4,7 +4,8 @@ import pl.edu.pw.elka.pszt.knapsack.Knapsack;
 
 import java.io.IOException;
 import java.util.Objects;
-// src/main/resources/inputExample.txt src/main/resources/out.txt src/main/resources/settings.txt
+
+// example of program arguments: example_input_files/inputExample.txt example_input_files/out.txt example_input_files/settings.txt
 class Application {
     private static final int NUMBER_OF_REQUIRED_ARGS = 2;
     private static final int NUMBER_OF_OPTIONAL_ARGS = 1;
