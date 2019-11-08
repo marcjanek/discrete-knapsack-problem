@@ -3,15 +3,15 @@ package pl.edu.pw.elka.pszt.knapsack;
 import lombok.AllArgsConstructor;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.Algorithm;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.Genetic;
-import pl.edu.pw.elka.pszt.knapsack.model.KnapsackObjects;
-import pl.edu.pw.elka.pszt.knapsack.model.InputLoader;
-import pl.edu.pw.elka.pszt.knapsack.model.Settings;
-import pl.edu.pw.elka.pszt.knapsack.model.ValidateKnapsackObjects;
+import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Population;
+import pl.edu.pw.elka.pszt.knapsack.model.*;
 
+import javax.swing.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 @AllArgsConstructor
 public class Knapsack {
@@ -24,8 +24,21 @@ public class Knapsack {
                 settings.getInitialPopulation() == 0 ? iko.getItems().size() : settings.getInitialPopulation()
         );
         validate(iko);
-        String result = calculate(iko,settings);
-        saveOutput(result);
+        if (settings.getGenerateChart() == 0) {
+            String result = calculate(iko, settings);
+            saveOutput(result);
+        } else {
+            Algorithm algorithm = new Genetic(iko, settings);
+            algorithm.calculate();
+            createChart(algorithm.getOldPopulations());
+        }
+    }
+
+    private void createChart(List<Population> populations) {
+        SwingUtilities.invokeLater(() -> {
+            Chart ex = new Chart(populations);
+            ex.setVisible(true);
+        });
     }
 
     private Settings loadSettings() {

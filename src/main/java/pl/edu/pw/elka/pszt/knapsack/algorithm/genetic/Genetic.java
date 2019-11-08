@@ -19,12 +19,11 @@ public class Genetic implements Algorithm {
     public  List<Population> oldPopulations;
     private final KnapsackObjects iko;
     private final Settings settings;
-
     @Override
     public String calculate() throws CloneNotSupportedException {
         Population population = getInitPopulation((int)settings.getInitialPopulation());
-        fix(population);
         oldPopulations = new ArrayList<>();
+        fix(population);
         do{
             oldPopulations.add(population);
             population = population.cycle(iko.knapsackCapacity.intValue(), (int)settings.getProbability());
