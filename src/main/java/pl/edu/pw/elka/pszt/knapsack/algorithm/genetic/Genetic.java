@@ -1,6 +1,5 @@
 package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.Algorithm;

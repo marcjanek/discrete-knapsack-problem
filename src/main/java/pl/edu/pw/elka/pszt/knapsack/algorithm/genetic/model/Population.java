@@ -42,17 +42,18 @@ public class Population implements Cloneable {
 
 
     public double dominatorPercentage() {
-        Map<Integer, Integer> map = new HashMap<>();
-        this.chromosomes.forEach(chromosome -> {
-            int key = chromosome.fitness();
-            map.put(key, map.getOrDefault(key, 0) + 1);
-        });
-        int frequency = map.values()
-                .stream()
-                .mapToInt(value -> value)
-                .max()
-                .orElse(0);
-        return (((100L * (double) frequency) / (double) chromosomes.size()));
+        if(chromosomes.size() == 0) return 100;
+        int max = chromosomes.get(0).fitness();
+        int count = 0;
+        for (Chromosome chromosome : chromosomes) {
+            if (chromosome.fitness() > max) {
+                max = chromosome.fitness();
+                count = 1;
+            } else if (chromosome.fitness() == max) {
+                count++;
+            }
+        }
+        return (double) count*100/chromosomes.size();
     }
 
     @Override
@@ -93,9 +94,14 @@ public class Population implements Cloneable {
     }
 
     private void cross(Chromosome father, Chromosome mother) throws CloneNotSupportedException {
-        int random = new Random().nextInt(father.size() + 1);
         Chromosome child = (Chromosome) father.clone();
         Chromosome child2 = (Chromosome) mother.clone();
+        if(father.equals(mother)) {
+            children.add(child);
+            children.add(child2);
+            return;
+        }
+        int random = new Random().nextInt(father.size() + 1);
         for (; random < father.size(); random++) {
             child.changeGen(random, (Gen) mother.getGen((long) random).clone());
             child2.changeGen(random, (Gen) father.getGen((long) random).clone());
@@ -106,7 +112,6 @@ public class Population implements Cloneable {
 
     private void selectParents() {
         if (chromosomes.size() == 0) return;
-
         int scoresSum = chromosomes.stream().mapToInt(Chromosome::fitness).sum();       //roulette wheel
         for (int i = 0; i < chromosomes.size(); i++) {
             int random = new Random().nextInt(scoresSum);
