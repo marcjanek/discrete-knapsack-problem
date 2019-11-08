@@ -38,8 +38,8 @@ public class Chromosome implements Cloneable {
         List<Gen> presentGens = this.gens.stream().filter(Gen::isPresent).collect(Collectors.toList());
         while (weight() > maxWeight && presentGens.size() > 0) {
             Gen gen = presentGens.get(random.nextInt(presentGens.size()));
-            presentGens.remove(gen);
             gen.negateIsPresent();
+            presentGens.remove(gen);
         }
     }
 
