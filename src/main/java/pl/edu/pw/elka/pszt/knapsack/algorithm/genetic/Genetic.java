@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic;
 
-import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.Algorithm;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Chromosome;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Gen;
@@ -12,14 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class Genetic implements Algorithm {
+    @Getter
+    public List<Population> oldPopulations;
     private final KnapsackObjects iko;
     private final Settings settings;
     @Override
     public String calculate() throws CloneNotSupportedException {
         Population population = getInitPopulation((int)settings.getInitialPopulation());
-        List<Population> oldPopulations = new ArrayList<>();
+        oldPopulations = new ArrayList<>();
         fix(population);
         do{
             oldPopulations.add(population);

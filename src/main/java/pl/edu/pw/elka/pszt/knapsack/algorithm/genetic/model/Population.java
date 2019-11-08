@@ -33,8 +33,9 @@ public class Population implements Cloneable {
         this.chromosomes.addAll(chromosomes);
     }
 
-
-
+    public double getAverageScore() {
+        return this.chromosomes.stream().mapToDouble(Chromosome::fitness).sum() / this.chromosomes.size();
+    }
     public Population cycle(int maxWeight, int probability) throws CloneNotSupportedException {
         selectParents();
         crossover();
@@ -44,6 +45,15 @@ public class Population implements Cloneable {
         return nextGeneration();
     }
 
+    public double getMaxScore() {
+        Chromosome chromosome = chromosomes.stream().max(Comparator.comparingInt(Chromosome::fitness)).orElseGet(null);
+        return Objects.nonNull(chromosome) ? chromosome.fitness() : 0;
+    }
+
+    public double getMinScore() {
+        Chromosome chromosome = chromosomes.stream().min(Comparator.comparingInt(Chromosome::fitness)).orElseGet(null);
+        return Objects.nonNull(chromosome) ? chromosome.fitness() : 0;
+    }
 
     public double dominatorPercentage() {
         Map<Integer, Integer> map = new HashMap<>();
@@ -151,4 +161,6 @@ public class Population implements Cloneable {
         newPopulation.addAll(children.stream().limit(chromosomes.size() - 1).collect(Collectors.toList()));
         return newPopulation;
     }
+
+
 }
