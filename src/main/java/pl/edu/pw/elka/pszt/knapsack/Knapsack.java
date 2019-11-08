@@ -29,7 +29,8 @@ public class Knapsack {
             saveOutput(result);
         } else {
             Algorithm algorithm = new Genetic(iko, settings);
-            algorithm.calculate();
+            String result = algorithm.calculate();
+            saveOutput(result);
             createChart(algorithm.getOldPopulations());
         }
     }
