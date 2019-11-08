@@ -29,10 +29,6 @@ public class Population implements Cloneable {
         this.chromosomes.add(chromosome);
     }
 
-    public void addAll(List<Chromosome> chromosomes) {
-        this.chromosomes.addAll(chromosomes);
-    }
-
 
 
     public Population cycle(int maxWeight, int probability) throws CloneNotSupportedException {
@@ -98,16 +94,11 @@ public class Population implements Cloneable {
 
     private void cross(Chromosome father, Chromosome mother) throws CloneNotSupportedException {
         int random = new Random().nextInt(father.size() + 1);
-        Chromosome child = new Chromosome();
-        Chromosome child2 = new Chromosome();
-        Long i = 0L;
-        for (; i < random; i++) {
-            child.add((Gen) father.getGen(i).clone());
-            child2.add((Gen) mother.getGen(i).clone());
-        }
-        for (; i < father.size(); i++) {
-            child.add((Gen) mother.getGen(i).clone());
-            child2.add((Gen) father.getGen(i).clone());
+        Chromosome child = (Chromosome) father.clone();
+        Chromosome child2 = (Chromosome) mother.clone();
+        for (; random < father.size(); random++) {
+            child.changeGen(random, (Gen) mother.getGen((long) random).clone());
+            child2.changeGen(random, (Gen) father.getGen((long) random).clone());
         }
         children.add(child);
         children.add(child2);
@@ -115,11 +106,9 @@ public class Population implements Cloneable {
 
     private void selectParents() {
         if (chromosomes.size() == 0) return;
-        //ToDo: same parent??
 
-        int scoresSum = chromosomes.stream().mapToInt(Chromosome::fitness).sum();
+        int scoresSum = chromosomes.stream().mapToInt(Chromosome::fitness).sum();       //roulette wheel
         int random = new Random().nextInt(scoresSum);
-        //ToDo: ?????
         for (int i = 0; i < chromosomes.size(); i++) {
             int sum = 0;
             for (Chromosome chromosome : chromosomes) {
@@ -150,5 +139,9 @@ public class Population implements Cloneable {
         newPopulation.add(chromosomes.get(0));
         newPopulation.addAll(children.stream().limit(chromosomes.size() - 1).collect(Collectors.toList()));
         return newPopulation;
+    }
+
+    private void addAll(List<Chromosome> chromosomes) {
+        this.chromosomes.addAll(chromosomes);
     }
 }

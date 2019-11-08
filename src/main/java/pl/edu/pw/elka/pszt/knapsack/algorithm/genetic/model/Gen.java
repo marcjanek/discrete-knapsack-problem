@@ -13,10 +13,6 @@ public class Gen extends Item implements Cloneable {
         super(weight, value);
     }
 
-    void negateIsPresent() {
-        isPresent = !isPresent;
-    }
-
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
@@ -25,5 +21,9 @@ public class Gen extends Item implements Cloneable {
     @Override
     public String toString(){
         return isPresent ? "1":"0";
+    }
+
+    void negateIsPresent() {
+        isPresent = !isPresent;
     }
 }

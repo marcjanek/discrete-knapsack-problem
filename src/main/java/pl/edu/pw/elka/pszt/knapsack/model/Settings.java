@@ -9,8 +9,8 @@ import java.io.FileNotFoundException;
 @Getter @Setter
 public class Settings extends FileGetter{
     private double initialPopulation = 0;
-    private double probability = 100;
-    private double dominatorPercentage = 0.9;
+    private double probability = 1;
+    private double dominatorPercentage = 0.95;
     private double iterations = 100;
 
     public void initDataFromFile(String inputPath){

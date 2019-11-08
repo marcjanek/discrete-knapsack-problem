@@ -1,4 +1,4 @@
-probability = 4
-dominatorPercentage = 0.8
+probability = 10
+dominatorPercentage = 0.95
 iterations = 100
 initialPopulation = 10

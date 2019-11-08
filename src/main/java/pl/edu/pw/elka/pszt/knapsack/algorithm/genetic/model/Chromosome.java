@@ -17,34 +17,10 @@ public class Chromosome implements Cloneable {
         gens.add(gen);
     }
 
-    int size() {
-        return gens.size();
-    }
-
-    Gen getGen(Long index) {
-        return gens.get(Math.toIntExact(index));
-    }
-
-    void mutate(int index) {
-        gens.get(index % size()).negateIsPresent();
-    }
-
-    public int fitness() {
-        return getPresentGens().stream()
-                .mapToInt(e -> Math.toIntExact(e.getValue()))
-                .sum();
-    }
-
     public int weight() {
         return getPresentGens().stream()
                 .mapToInt(e -> Math.toIntExact(e.getWeight()))
                 .sum();
-    }
-
-    public List<Gen> getPresentGens() {
-        return gens.stream()
-                .filter(e -> e.isPresent)
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -63,5 +39,29 @@ public class Chromosome implements Cloneable {
             presentGens.remove(gen);
             gen.negateIsPresent();
         }
+    }
+
+    int size() {
+        return gens.size();
+    }
+
+    Gen getGen(Long index) {
+        return gens.get(Math.toIntExact(index));
+    }
+
+    void changeGen(long index, Gen gen) {
+        gens.set((int) index, gen);
+    }
+
+    int fitness() {
+        return getPresentGens().stream()
+                .mapToInt(e -> Math.toIntExact(e.getValue()))
+                .sum();
+    }
+
+    private List<Gen> getPresentGens() {
+        return gens.stream()
+                .filter(e -> e.isPresent)
+                .collect(Collectors.toList());
     }
 }
