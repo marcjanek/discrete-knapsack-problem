@@ -3,17 +3,14 @@ package pl.edu.pw.elka.pszt.knapsack.model;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
 
 @AllArgsConstructor
-public class InputLoader {
+public class InputLoader extends FileGetter {
     private final String inputPath;
 
     public KnapsackObjects load() throws IOException {
-        String inputData = getDataFromFile();
+        String inputData = getDataFromFile(inputPath);
         return setInputKnapsackObjects(inputData);
     }
 
@@ -63,18 +60,5 @@ public class InputLoader {
 
     private boolean nonNumber(String string) {
         return !NumberUtils.isParsable(string);
-    }
-
-    private String getDataFromFile() throws FileNotFoundException {
-        Scanner scanner = new Scanner(getFile());
-        StringBuilder stringBuilder = new StringBuilder();
-        while (scanner.hasNextLine())
-            stringBuilder.append(scanner.nextLine()).append("\n");
-        scanner.close();
-        return stringBuilder.toString();
-    }
-
-    private File getFile() {
-        return new File(inputPath);
     }
 }

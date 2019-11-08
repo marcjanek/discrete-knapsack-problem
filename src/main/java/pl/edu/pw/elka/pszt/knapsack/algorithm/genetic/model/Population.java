@@ -3,13 +3,12 @@ package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor
-@ToString
 public class Population implements Cloneable {
     @NonNull
     private final Long number;
@@ -26,12 +25,72 @@ public class Population implements Cloneable {
         return clone;
     }
 
-    private void sort(List<Chromosome> list) {
-        list.sort((d1, d2) -> d2.fitness() - d1.fitness());
-    }
-
     public void add(Chromosome chromosome) {
         this.chromosomes.add(chromosome);
+    }
+
+    public double getAverageScore() {
+        return this.chromosomes.stream().mapToDouble(Chromosome::fitness).sum() / this.chromosomes.size();
+    }
+    public Population cycle(int maxWeight, int probability) throws CloneNotSupportedException {
+        selectParents();
+        crossover();
+        fix(children, maxWeight);
+        mutate(probability);
+        fix(children, maxWeight);
+        return nextGeneration();
+    }
+
+    public double getMaxScore() {
+        Chromosome chromosome = chromosomes.stream().max(Comparator.comparingInt(Chromosome::fitness)).orElseGet(null);
+        return Objects.nonNull(chromosome) ? chromosome.fitness() : 0;
+    }
+
+    public double getMinScore() {
+        Chromosome chromosome = chromosomes.stream().min(Comparator.comparingInt(Chromosome::fitness)).orElseGet(null);
+        return Objects.nonNull(chromosome) ? chromosome.fitness() : 0;
+    }
+
+    public double dominatorPercentage() {
+        if(chromosomes.size() == 0) return 100;
+        int max = chromosomes.get(0).fitness();
+        int count = 0;
+        for (Chromosome chromosome : chromosomes) {
+            if (chromosome.fitness() > max) {
+                max = chromosome.fitness();
+                count = 1;
+            } else if (chromosome.fitness() == max) {
+                count++;
+            }
+        }
+        return (double) count*100/chromosomes.size();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder text = new StringBuilder();
+        text.append("Population ").append(String.format("%5s", number + 1)).append(": ");
+        for (Chromosome chromosome : chromosomes) {
+            for (Gen gen : chromosome.gens) {
+                text.append(gen.toString());
+            }
+            text.append(" ");
+        }
+        return text.toString();
+    }
+
+    public String bestFound()
+    {
+        sort(chromosomes);
+        return "Best found: " + chromosomes.get(0).toString() + " Fitness: " + chromosomes.get(0).fitness() + " Weight: " + chromosomes.get(0).weight();
+    }
+
+    private void fix(List<Chromosome> list, int maxWeight) {
+        list.forEach(chromosome -> chromosome.fix(maxWeight));
+    }
+
+    private void sort(List<Chromosome> list) {
+        list.sort((d1, d2) -> d2.fitness() - d1.fitness());
     }
 
     private void crossover() throws CloneNotSupportedException {
@@ -45,30 +104,27 @@ public class Population implements Cloneable {
     }
 
     private void cross(Chromosome father, Chromosome mother) throws CloneNotSupportedException {
-        int random = new Random().nextInt(father.size() + 1);
-        Chromosome child = new Chromosome();
-        Chromosome child2 = new Chromosome();
-        Long i = 0L;
-        for (; i < random; i++) {
-            child.add((Gen) father.getGen(i).clone());
-            child2.add((Gen) mother.getGen(i).clone());
+        Chromosome child = (Chromosome) father.clone();
+        Chromosome child2 = (Chromosome) mother.clone();
+        if(father.equals(mother)) {
+            children.add(child);
+            children.add(child2);
+            return;
         }
-        for (; i < father.size(); i++) {
-            child.add((Gen) mother.getGen(i).clone());
-            child2.add((Gen) father.getGen(i).clone());
+        int random = new Random().nextInt(father.size() + 1);
+        for (; random < father.size(); random++) {
+            child.changeGen(random, (Gen) mother.getGen((long) random).clone());
+            child2.changeGen(random, (Gen) father.getGen((long) random).clone());
         }
         children.add(child);
         children.add(child2);
     }
 
     private void selectParents() {
-
-        int scoressum = 0;
-        for (Chromosome chromosome : chromosomes) {
-            scoressum += chromosome.fitness();
-        }
-        int random = new Random().nextInt(scoressum);
+        if (chromosomes.size() == 0) return;
+        int scoresSum = chromosomes.stream().mapToInt(Chromosome::fitness).sum();       //roulette wheel
         for (int i = 0; i < chromosomes.size(); i++) {
+            int random = new Random().nextInt(scoresSum);
             int sum = 0;
             for (Chromosome chromosome : chromosomes) {
                 sum += chromosome.fitness();
@@ -80,59 +136,27 @@ public class Population implements Cloneable {
         }
     }
 
-    private void mutate(int probability) {
-        for (Chromosome chromosome : children) {
-            for (Gen gen : chromosome.gens) {
-                int random = new Random().nextInt(1000);
-                if (random <= probability) gen.negateIsPresent();
+    private void mutate(final int probability) {
+        final Random random = new Random();
+        children.forEach(chromosome -> chromosome.gens.forEach(gen -> {
+            int randomNumber = random.nextInt(1000);
+            if (randomNumber <= probability) {
+                gen.negateIsPresent();
             }
-        }
+        }));
     }
 
     private Population nextGeneration() {
+        if (chromosomes.size() == 0) return null;
         sort(children);
         sort(chromosomes);
-        List<Chromosome> tmp = new ArrayList<>();
-        tmp.add(chromosomes.get(0));
-        int i = 1;
-        while (i < chromosomes.size()) {
-            tmp.add(children.get(i - 1));
-            i++;
-        }
-        chromosomes = tmp;
-        Population population = new Population(number + 1);
-        for (Chromosome chromosome : tmp) {
-            population.add(chromosome);
-        }
-        return population;
+        Population newPopulation = new Population(this.number + 1);
+        newPopulation.add(chromosomes.get(0));
+        newPopulation.addAll(children.stream().limit(chromosomes.size() - 1).collect(Collectors.toList()));
+        return newPopulation;
     }
 
-    public Population cycle(int maxWeight, int probability) throws CloneNotSupportedException {
-        selectParents();
-        crossover();
-        for (Chromosome child : children)
-        {
-            child.fix(maxWeight);
-        }
-        mutate(probability);
-        for (Chromosome child : children)
-        {
-            child.fix(maxWeight);
-        }
-        return nextGeneration();
-    }
-
-    public double dominatorPercentage() {
-        Map<Integer, Integer> map = new HashMap<>();
-        this.chromosomes.forEach(chromosome -> {
-            int key = chromosome.fitness();
-            map.put(key, map.getOrDefault(key, 0) + 1);
-        });
-        int frequency = map.values()
-                .stream()
-                .mapToInt(value -> value)
-                .max()
-                .orElse(0);
-        return (((100L * (double) frequency) / (double) chromosomes.size()));
+    private void addAll(List<Chromosome> chromosomes) {
+        this.chromosomes.addAll(chromosomes);
     }
 }

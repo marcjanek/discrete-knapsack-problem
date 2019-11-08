@@ -16,21 +16,21 @@ class PopulationTest {
         }
 
         @Test
-        @DisplayName("crossoverforzero")
+        @DisplayName("cross over for zero")
         void testCrossover() throws CloneNotSupportedException {
             Population population = new Population(0L);
             check(population);
         }
 
         @Test
-        @DisplayName("crossoverforone")
+        @DisplayName("cross over for one")
         void testCrossover1() throws CloneNotSupportedException {
             Population population = new Population(1L);
             check(population);
         }
 
         @Test
-        @DisplayName("crossoverfortwo")
+        @DisplayName("cross over for two")
         void testCrossover2() throws CloneNotSupportedException {
             Population population = new Population(2L);
             check(population);

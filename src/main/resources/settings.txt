@@ -1,4 +1,3 @@
 dominatorPercentage = 0.8
-probability = 10
 iterations = 100
 initialPopulation = 10

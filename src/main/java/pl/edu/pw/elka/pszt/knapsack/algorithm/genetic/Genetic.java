@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic;
 
-import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.Algorithm;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Chromosome;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Gen;
@@ -9,24 +10,42 @@ import pl.edu.pw.elka.pszt.knapsack.model.KnapsackObjects;
 import pl.edu.pw.elka.pszt.knapsack.model.Settings;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class Genetic implements Algorithm {
+    @Getter
+    public  List<Population> oldPopulations;
     private final KnapsackObjects iko;
     private final Settings settings;
     @Override
     public String calculate() throws CloneNotSupportedException {
-        List<Population> populations = new ArrayList<>();
-        Population population = getInitPopulation(iko.getItems().size());// FIXME: 29.10.2019 change to setting
+        Population population = getInitPopulation((int)settings.getInitialPopulation());
+        oldPopulations = new ArrayList<>();
         fix(population);
         do{
-            populations.add(population);
+            oldPopulations.add(population);
             population = population.cycle(iko.knapsackCapacity.intValue(), (int)settings.getProbability());
-        }while(population.getNumber() < settings.getIterations());
-        return Arrays.toString(populations.toArray()) + "\n" + population.toString();
+        } while (population.getNumber() < settings.getIterations() ||
+                population.dominatorPercentage() < settings.getDominatorPercentage());
+        oldPopulations.add(population);
+        return getResultString(oldPopulations);
+    }
+
+    private String getResultString(List<Population> populations) {
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < populations.size() - 1; i++) {
+            text.append(populations.get(i).toString()).append("\n");
+        }
+        if (populations.size() > 0)
+            text.append("result:")
+                    .append("\n")
+                    .append(populations.get(populations.size() - 1).toString())
+                    .append("\n")
+                    .append(populations.get(populations.size() - 1).bestFound())
+                    .append("\n");
+        return text.toString();
     }
 
     private void fix(Population population) {
