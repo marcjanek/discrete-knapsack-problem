@@ -57,10 +57,10 @@ public class Chromosome implements Cloneable {
 
     public void fix(final int maxWeight) {
         Random random = new Random(System.currentTimeMillis());
-        List<Gen> collect = this.gens.stream().filter(Gen::isPresent).collect(Collectors.toList());
-        while (weight() > maxWeight && collect.size() > 0) {
-            Gen gen = collect.get(random.nextInt(collect.size()));
-            collect.remove(gen);
+        List<Gen> presentGens = this.gens.stream().filter(Gen::isPresent).collect(Collectors.toList());
+        while (weight() > maxWeight && presentGens.size() > 0) {
+            Gen gen = presentGens.get(random.nextInt(presentGens.size()));
+            presentGens.remove(gen);
             gen.negateIsPresent();
         }
     }

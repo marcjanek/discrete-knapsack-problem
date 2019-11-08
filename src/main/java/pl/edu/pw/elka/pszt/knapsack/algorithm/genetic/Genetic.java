@@ -9,7 +9,6 @@ import pl.edu.pw.elka.pszt.knapsack.model.KnapsackObjects;
 import pl.edu.pw.elka.pszt.knapsack.model.Settings;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -20,13 +19,29 @@ public class Genetic implements Algorithm {
     @Override
     public String calculate() throws CloneNotSupportedException {
         Population population = getInitPopulation((int)settings.getInitialPopulation());
-        StringBuilder text = new StringBuilder();
+        List<Population> oldPopulations = new ArrayList<>();
         fix(population);
         do{
-            text.append(population.toString()).append("\n");
+            oldPopulations.add(population);
             population = population.cycle(iko.knapsackCapacity.intValue(), (int)settings.getProbability());
-        }while(population.getNumber() < settings.getIterations());
-        text.append("result:").append("\n").append(population.toString()).append("\n").append(population.bestFound()).append("\n");
+        } while (population.getNumber() < settings.getIterations() ||
+                population.dominatorPercentage() < settings.getDominatorPercentage());
+        oldPopulations.add(population);
+        return getResultString(oldPopulations);
+    }
+
+    private String getResultString(List<Population> populations) {
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < populations.size() - 1; i++) {
+            text.append(populations.get(i).toString()).append("\n");
+        }
+        if (populations.size() > 0)
+            text.append("result:")
+                    .append("\n")
+                    .append(populations.get(populations.size() - 1).toString())
+                    .append("\n")
+                    .append(populations.get(populations.size() - 1).bestFound())
+                    .append("\n");
         return text.toString();
     }
 

@@ -35,6 +35,7 @@ public class Population implements Cloneable {
     private void sort(List<Chromosome> list) {
         list.sort((d1, d2) -> d2.fitness() - d1.fitness());
     }
+
     private void crossover() throws CloneNotSupportedException {
         for (int i = 0; i < parents.size(); i++) {
             Chromosome mother = parents.get(i);
