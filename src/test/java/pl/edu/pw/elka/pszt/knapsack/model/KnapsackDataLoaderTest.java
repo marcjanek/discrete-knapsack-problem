@@ -13,7 +13,7 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-class InputLoaderTest {
+class KnapsackDataLoaderTest {
     private final String PATH = "src/test/resources/pl.edu.pw.elka.pszt.knapsack.model/inputLoader/";
 
     String loadFile(String path) throws FileNotFoundException {
@@ -31,21 +31,21 @@ class InputLoaderTest {
         @DisplayName("4 items")
         void test1() throws IOException {
             String path = PATH + "correctInput/test1.txt";
-            test(loadFile(path).split("\n"), new InputLoader(path).load());
+            test(loadFile(path).split("\n"), new KnapsackDataLoader(path).load());
         }
 
         @Test
         @DisplayName("no items")
         void test2() throws IOException {
             String path = PATH + "correctInput/test2.txt";
-            test(loadFile(path).split("\n"), new InputLoader(path).load());
+            test(loadFile(path).split("\n"), new KnapsackDataLoader(path).load());
         }
 
         @Test
         @DisplayName("1 item")
         void test3() throws IOException {
             String path = PATH + "correctInput/test3.txt";
-            test(loadFile(path).split("\n"), new InputLoader(path).load());
+            test(loadFile(path).split("\n"), new KnapsackDataLoader(path).load());
         }
 
         void test(String[] split, KnapsackObjects knapsackObjects) {
@@ -113,7 +113,7 @@ class InputLoaderTest {
 
         private void test(String expected, String path) {
             try {
-                new InputLoader(path).load();
+                new KnapsackDataLoader(path).load();
             } catch (IOException e) {
                 assertEquals(expected, e.getMessage());
                 return;

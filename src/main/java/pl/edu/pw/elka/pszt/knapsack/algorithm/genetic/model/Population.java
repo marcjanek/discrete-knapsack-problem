@@ -10,9 +10,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+/**
+ * The type Population.
+ */
 @Getter
 @RequiredArgsConstructor
 public class Population implements Cloneable {
+
     @NonNull
     private final Long number;
     private final List<Chromosome> chromosomes = new ArrayList<>();
@@ -21,9 +25,9 @@ public class Population implements Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Object clone = super.clone();
+        Population clone = new Population(this.number + 1);
         for (Chromosome chromosome : this.chromosomes) {
-            ((Population) clone).add((Chromosome) chromosome.clone());
+            clone.add((Chromosome) chromosome.clone());
         }
         return clone;
     }
@@ -32,7 +36,14 @@ public class Population implements Cloneable {
         this.chromosomes.add(chromosome);
     }
 
-
+    /**
+     * method performs one cycle of genetic algorithm
+     *
+     * @param maxVolume   the max volume
+     * @param probability the probability
+     * @return the population
+     * @throws CloneNotSupportedException the clone not supported exception
+     */
     public Population cycle(int maxVolume, int probability) throws CloneNotSupportedException {
         selectParents();
         crossover();
@@ -42,24 +53,48 @@ public class Population implements Cloneable {
         return nextGeneration();
     }
 
-    public double getAverageScore() {
-        return this.chromosomes.stream().mapToDouble(Chromosome::fitness).sum() / this.chromosomes.size();
+    /**
+     * Gets average fitness from population.
+     *
+     * @return the average fitness
+     */
+    public double getAverageFitness() {
+        return this.chromosomes
+                .stream()
+                .mapToDouble(Chromosome::fitness)
+                .average()
+                .orElse(Double.NaN);
     }
 
-    public double getMaxScore() {
+    /**
+     * Gets max fitness value in population.
+     *
+     * @return the max fitness
+     */
+    public double getMaxFitness() {
         return chromosomes.stream()
                 .max(Comparator.comparingInt(Chromosome::fitness))
                 .orElse(new Chromosome())
                 .fitness();
     }
 
-    public double getMinScore() {
+    /**
+     * Gets min fitness value in population.
+     *
+     * @return the min fitness
+     */
+    public double getMinFitness() {
         return chromosomes.stream()
                 .min(Comparator.comparingInt(Chromosome::fitness))
                 .orElse(new Chromosome())
                 .fitness();
     }
 
+    /**
+     * Dominator percentage value in population.
+     *
+     * @return the double
+     */
     public double dominatorPercentage() {
         if(chromosomes.size() == 0) return 100;
         int max = chromosomes.get(0).fitness();
@@ -72,8 +107,7 @@ public class Population implements Cloneable {
                 count++;
             }
         }
-        final double v = (double) count * 100 / chromosomes.size();
-        return v;
+        return (double) (count * 100) / (double) chromosomes.size();
     }
 
     @Override
@@ -89,14 +123,35 @@ public class Population implements Cloneable {
         return text.toString();
     }
 
+    /**
+     * Best found string.
+     *
+     * @return the string
+     */
     public String bestFound()
     {
-        sort(chromosomes);
-        return "Best found: " + chromosomes.get(0).toString() + " Fitness: " + chromosomes.get(0).fitness() + " Volume: " + chromosomes.get(0).volume();
+        String chromosomeInString,fitness, volume;
+        if(chromosomes.isEmpty()){
+            chromosomeInString = "null";
+            fitness = String.valueOf(Double.NaN);
+            volume = String.valueOf(Double.NaN);
+        } else {
+            sort(chromosomes);
+            Chromosome chromosome = chromosomes.get(0);
+            chromosomeInString = chromosome.toString();
+            fitness = String.valueOf(chromosome.fitness());
+            volume = String.valueOf(chromosome.volume());
+        }
+        return String.format("Best found: %s Fitness: %s Volume: %s",chromosomeInString, fitness,volume);
     }
 
-    public void fixChromosomes(int volume) {
-        fix(this.chromosomes, volume);
+    /**
+     * Fix chromosomes in population.
+     *
+     * @param maxVolume the max volume of chromosome
+     */
+    public void fixChromosomes(int maxVolume) {
+        fix(this.chromosomes, maxVolume);
     }
 
     private void fix(List<Chromosome> list, int maxVolume) {

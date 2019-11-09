@@ -62,7 +62,7 @@ class SettingsTest {
             settings.initDataFromFile(path);
             assertEquals(101,settings.getProbability());
             assertEquals(0.8,settings.getDominatorPercentage());
-            assertEquals(new Settings().getProbability(),settings.getIterations());
+            assertEquals(new Settings().getIterations(),settings.getIterations());
         }
 
         @Test
@@ -72,7 +72,7 @@ class SettingsTest {
             settings.initDataFromFile(path);
             assertEquals(101,settings.getProbability());
             assertEquals(0.8,settings.getDominatorPercentage());
-            assertEquals(new Settings().getProbability(),settings.getIterations());
+            assertEquals(new Settings().getIterations(),settings.getIterations());
         }
         @Test
         @DisplayName("no \"=\" between key and value")
@@ -81,7 +81,7 @@ class SettingsTest {
             settings.initDataFromFile(path);
             assertEquals(101,settings.getProbability());
             assertEquals(0.8,settings.getDominatorPercentage());
-            assertEquals(new Settings().getProbability(),settings.getIterations());
+            assertEquals(new Settings().getIterations(),settings.getIterations());
         }
         @Test
         @DisplayName("2 \"=\" in line")
@@ -90,7 +90,7 @@ class SettingsTest {
             settings.initDataFromFile(path);
             assertEquals(101,settings.getProbability());
             assertEquals(0.8,settings.getDominatorPercentage());
-            assertEquals(new Settings().getProbability(),settings.getIterations());
+            assertEquals(new Settings().getIterations(),settings.getIterations());
         }
     }
 }
