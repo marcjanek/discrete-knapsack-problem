@@ -40,7 +40,8 @@ public class Population implements Cloneable {
      * method performs one cycle of genetic algorithm
      *
      * @param maxVolume   the max volume
-     * @param probability the probability
+     * @param chromosomePerMile the chromosome Per-mile chance to mutate
+     * @param genPerMile thx gen Per-mile chance to mutate
      * @return the population
      * @throws CloneNotSupportedException the clone not supported exception
      */
