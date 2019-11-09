@@ -34,14 +34,14 @@ public class Chart extends JFrame {
                 populations.stream()
                         .filter(e -> e.getNumber() % (populations.size() / 100) == 0)
                         .map(e -> new Point(e.getNumber().intValue(),
-                                (int) e.getAverageScore())).collect(Collectors.toList())
+                                (int) e.getAverageFitness())).collect(Collectors.toList())
                 )
         );
         xySeriesCollection.addSeries(createSeries("max",
                 populations.stream()
                         .filter(e -> e.getNumber() % (populations.size() / 100) == 0)
                         .map(e -> new Point(e.getNumber().intValue(),
-                                (int) e.getMaxScore())).collect(Collectors.toList())
+                                (int) e.getMaxFitness())).collect(Collectors.toList())
                 )
         );
 
@@ -49,7 +49,7 @@ public class Chart extends JFrame {
                 populations.stream()
                         .filter(e -> e.getNumber() % (populations.size() / 100) == 0)
                         .map(e -> new Point(e.getNumber().intValue(),
-                                (int) e.getMinScore())).collect(Collectors.toList())
+                                (int) e.getMinFitness())).collect(Collectors.toList())
                 )
         );
         JFreeChart chart = createChart(xySeriesCollection);

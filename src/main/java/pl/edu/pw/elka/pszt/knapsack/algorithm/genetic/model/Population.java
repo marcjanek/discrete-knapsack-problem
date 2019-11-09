@@ -42,18 +42,22 @@ public class Population implements Cloneable {
         return nextGeneration();
     }
 
-    public double getAverageScore() {
-        return this.chromosomes.stream().mapToDouble(Chromosome::fitness).sum() / this.chromosomes.size();
+    public double getAverageFitness() {
+        return this.chromosomes
+                .stream()
+                .mapToDouble(Chromosome::fitness)
+                .average()
+                .orElse(Double.NaN);
     }
 
-    public double getMaxScore() {
+    public double getMaxFitness() {
         return chromosomes.stream()
                 .max(Comparator.comparingInt(Chromosome::fitness))
                 .orElse(new Chromosome())
                 .fitness();
     }
 
-    public double getMinScore() {
+    public double getMinFitness() {
         return chromosomes.stream()
                 .min(Comparator.comparingInt(Chromosome::fitness))
                 .orElse(new Chromosome())
@@ -72,8 +76,7 @@ public class Population implements Cloneable {
                 count++;
             }
         }
-        final double v = (double) count * 100 / chromosomes.size();
-        return v;
+        return (double) (count * 100) / (double) chromosomes.size();
     }
 
     @Override
@@ -91,8 +94,19 @@ public class Population implements Cloneable {
 
     public String bestFound()
     {
-        sort(chromosomes);
-        return "Best found: " + chromosomes.get(0).toString() + " Fitness: " + chromosomes.get(0).fitness() + " Volume: " + chromosomes.get(0).volume();
+        String chromosomeInString,fitness, volume;
+        if(chromosomes.isEmpty()){
+            chromosomeInString = "null";
+            fitness = String.valueOf(Double.NaN);
+            volume = String.valueOf(Double.NaN);
+        } else {
+            sort(chromosomes);
+            Chromosome chromosome = chromosomes.get(0);
+            chromosomeInString = chromosome.toString();
+            fitness = String.valueOf(chromosome.fitness());
+            volume = String.valueOf(chromosome.volume());
+        }
+        return String.format("Best found: %s Fitness: %s Volume: %s",chromosomeInString, fitness,volume);
     }
 
     public void fixChromosomes(int volume) {
