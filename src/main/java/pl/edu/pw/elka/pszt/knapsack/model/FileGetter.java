@@ -4,7 +4,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ * The type File getter.
+ */
 class FileGetter {
+    /**
+     * Gets data from file as String.
+     *
+     * @param path the path
+     * @return the data from file
+     * @throws FileNotFoundException the file not found exception
+     */
     String getDataFromFile(String path) throws FileNotFoundException {
         Scanner scanner = new Scanner(getFile(path));
         StringBuilder stringBuilder = new StringBuilder();

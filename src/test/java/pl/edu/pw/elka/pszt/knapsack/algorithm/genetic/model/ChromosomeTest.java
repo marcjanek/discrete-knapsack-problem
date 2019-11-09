@@ -28,6 +28,27 @@ class ChromosomeTest {
         }
     }
 
+
+    @Nested
+    class Clone{
+        @Test
+        @DisplayName("empty list")
+        void test1() throws CloneNotSupportedException {
+            assertNotSame(emptyChromosome, emptyChromosome.clone());
+        }
+
+        @Test
+        @DisplayName("filled list")
+        void test2() throws CloneNotSupportedException {
+            final Chromosome clone = (Chromosome) filledChromosome.clone();
+            assertNotSame(emptyChromosome, clone);
+            List<Gen> gens = emptyChromosome.gens;
+            for (int i = 0; i < gens.size(); i++) {
+                assertNotSame(emptyChromosome.getGen((long)i),clone.getGen((long)i));
+            }
+        }
+    }
+
     @Nested
     class Add {
         @Test

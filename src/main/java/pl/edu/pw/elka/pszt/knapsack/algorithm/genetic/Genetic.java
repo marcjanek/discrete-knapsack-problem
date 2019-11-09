@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The type Genetic.
+ */
 @RequiredArgsConstructor
 public class Genetic implements Algorithm {
     @Getter

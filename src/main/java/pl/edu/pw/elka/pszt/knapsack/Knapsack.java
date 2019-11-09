@@ -24,7 +24,7 @@ public class Knapsack {
     private String settingsPath;
 
     /**
-     * Run.
+     * Run all program functionality.
      *
      * @throws IOException                the io exception
      * @throws CloneNotSupportedException the clone not supported exception
@@ -60,7 +60,7 @@ public class Knapsack {
     }
 
     private KnapsackObjects loadInput() throws IOException {
-        return new InputLoader(inputPath).load();
+        return new KnapsackDataLoader(inputPath).load();
     }
 
     private void validate(KnapsackObjects knapsackObjects) throws IOException {
