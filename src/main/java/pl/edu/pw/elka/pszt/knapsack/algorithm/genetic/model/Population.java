@@ -40,15 +40,14 @@ public class Population implements Cloneable {
      * method performs one cycle of genetic algorithm
      *
      * @param maxVolume   the max volume
-     * @param probability the probability
      * @return the population
      * @throws CloneNotSupportedException the clone not supported exception
      */
-    public Population cycle(int maxVolume, int chromosomePerMile, int genPerMile) throws CloneNotSupportedException {
+    public Population cycle(int maxVolume, double genPerMile) throws CloneNotSupportedException {
         selectParents();
         crossover();
         fix(children, maxVolume);
-        mutate(chromosomePerMile, genPerMile);
+        mutate(genPerMile);
         fix(children, maxVolume);
         return nextGeneration();
     }
@@ -208,11 +207,16 @@ public class Population implements Cloneable {
         });
     }
 
-    private void mutate(int chromosomePerMile, int genPerMile) {
-        final Random random = new Random();
-        children.stream()
-                .filter(chromosome -> random.nextInt(1000) <= chromosomePerMile)
-                .forEach(chromosome -> chromosome.mutate(genPerMile));
+    private void mutate(final double probability) {
+        Random random = new Random();
+        for (Chromosome child : children) {
+            for (Gen gen : child.gens) {
+                double randomNumber = random.nextDouble();
+                if (randomNumber <= probability) {
+                    gen.negateIsPresent();
+                }
+            }
+        }
     }
 
     private Population nextGeneration() {

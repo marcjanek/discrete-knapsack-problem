@@ -19,8 +19,8 @@ public class Settings extends FileGetter{
     public Settings(final long initialPopulation){
         this.settingList = new ArrayList<>();
         settingList.add(new Setting("initialPopulation",initialPopulation));
-        settingList.add(new Setting("genPerMille", 10D));//‰ * 1000
-        settingList.add(new Setting("chromosomePerMille", 10D));//‰ * 1000
+        settingList.add(new Setting("chromosomePerMille", 100D));//‰ * 1000
+        settingList.add(new Setting("genPerMille", calculategenPerMille(100D)));//‰ * 1000
         settingList.add(new Setting("dominatorPercentage", 10D));//%
         settingList.add(new Setting("iterations", 100L));
         settingList.add(new Setting("generateChart",true));
@@ -32,10 +32,6 @@ public class Settings extends FileGetter{
 
     public double getGenPerMille() {
         return (double) getSettingValue("genPerMille");
-    }
-
-    public double getChromosomePerMille() {
-        return (double) getSettingValue("chromosomePerMille");
     }
 
     public double getDominatorPercentage() {
@@ -77,10 +73,23 @@ public class Settings extends FileGetter{
             }
         }
     }
+
+    private double calculategenPerMille(double chromosomePerMille) {
+        double x = getInitialPopulation();
+        return 1 - Math.pow(1 - chromosomePerMille / 1000, 1 / x);
+    }
     private void setValue(String key, String value){
         switch (key){
             case "genPerMille"://double
-            case "dominatorPercentage":
+            case "dominatorPercentage": {
+                if (!NumberUtils.isParsable(value))
+                    return;
+                double val = Double.parseDouble(value);
+                if (val < 0)
+                    return;
+                setSetting(key, val);
+            }
+            break;
             case "chromosomePerMille":{
                 if(!NumberUtils.isParsable(value))
                     return;
@@ -88,6 +97,7 @@ public class Settings extends FileGetter{
                 if(val < 0)
                     return;
                 setSetting(key, val);
+                setSetting("chromosomePerMille", calculategenPerMille(val));
             }
             break;
             case "iterations"://long

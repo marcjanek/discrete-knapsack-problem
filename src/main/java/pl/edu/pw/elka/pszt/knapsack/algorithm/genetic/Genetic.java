@@ -25,13 +25,13 @@ public class Genetic implements Algorithm {
     @Override
     public String calculate() throws CloneNotSupportedException {
         Population population = getInitPopulation((int)settings.getInitialPopulation());
+        if (population.getChromosomes().size() == 0) return "";
         oldPopulations = new ArrayList<>();
         while (population.getNumber() < settings.getIterations() ||
                 population.dominatorPercentage() < settings.getDominatorPercentage()) {
             oldPopulations.add(population);
             population = population.cycle(knapsackObjects.getKnapsackCapacity().intValue(),
-                    (int) settings.getChromosomePerMille(),
-                    (int) settings.getGenPerMille());
+                    settings.getGenPerMille());
         }
         oldPopulations.add(population);
         return getResultString(oldPopulations);
