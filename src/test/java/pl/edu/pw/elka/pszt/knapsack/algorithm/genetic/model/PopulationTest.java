@@ -77,11 +77,6 @@ class PopulationTest {
     }
 
     @Nested
-    class Cycle{
-        //ToDo:
-    }
-
-    @Nested
     class GetAverageScore{
         @Test
         @DisplayName("empty population")

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @Getter
 @RequiredArgsConstructor
 public class Population implements Cloneable {
+
     @NonNull
     private final Long number;
     private final List<Chromosome> chromosomes = new ArrayList<>();
@@ -31,7 +32,6 @@ public class Population implements Cloneable {
     public void add(Chromosome chromosome) {
         this.chromosomes.add(chromosome);
     }
-
 
     public Population cycle(int maxVolume, int probability) throws CloneNotSupportedException {
         selectParents();

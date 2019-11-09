@@ -16,18 +16,20 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class Genetic implements Algorithm {
     @Getter
-    public  List<Population> oldPopulations;
+    public List<Population> oldPopulations;
     private final KnapsackObjects knapsackObjects;
     private final Settings settings;
     @Override
     public String calculate() throws CloneNotSupportedException {
         Population population = getInitPopulation((int)settings.getInitialPopulation());
         oldPopulations = new ArrayList<>();
-        do{
+        oldPopulations.add(population);
+        population = population.cycle(knapsackObjects.getKnapsackCapacity().intValue(), (int) settings.getProbability());
+        while (population.getNumber() < settings.getIterations() ||
+                population.dominatorPercentage() < settings.getDominatorPercentage()) {
             oldPopulations.add(population);
             population = population.cycle(knapsackObjects.getKnapsackCapacity().intValue(), (int) settings.getProbability());
-        } while (population.getNumber() < settings.getIterations() ||
-                population.dominatorPercentage() < settings.getDominatorPercentage());
+        }
         oldPopulations.add(population);
         return getResultString(oldPopulations);
     }
