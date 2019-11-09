@@ -25,9 +25,9 @@ public class Population implements Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Object clone = super.clone();
+        Population clone = new Population(this.number + 1);
         for (Chromosome chromosome : this.chromosomes) {
-            ((Population) clone).add((Chromosome) chromosome.clone());
+            clone.add((Chromosome) chromosome.clone());
         }
         return clone;
     }

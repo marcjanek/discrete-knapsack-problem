@@ -34,7 +34,9 @@ class ChromosomeTest {
         @Test
         @DisplayName("empty list")
         void test1() throws CloneNotSupportedException {
-            assertNotSame(emptyChromosome, emptyChromosome.clone());
+            Object clone = emptyChromosome.clone();
+            assertNotSame(emptyChromosome, clone);
+            assertNotSame(emptyChromosome.gens,((Chromosome) clone).gens);
         }
 
         @Test
@@ -42,6 +44,7 @@ class ChromosomeTest {
         void test2() throws CloneNotSupportedException {
             final Chromosome clone = (Chromosome) filledChromosome.clone();
             assertNotSame(emptyChromosome, clone);
+            assertNotSame(emptyChromosome.gens,clone.gens);
             List<Gen> gens = emptyChromosome.gens;
             for (int i = 0; i < gens.size(); i++) {
                 assertNotSame(emptyChromosome.getGen((long)i),clone.getGen((long)i));

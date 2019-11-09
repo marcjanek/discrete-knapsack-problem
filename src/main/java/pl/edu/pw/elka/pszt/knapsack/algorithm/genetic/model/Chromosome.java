@@ -40,12 +40,11 @@ public class Chromosome implements Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Object clone = super.clone();
-        List<Gen> genList = this.gens;
-        for (int i = 0; i < genList.size(); i++) {
-            ((Chromosome) clone).changeGen(i, (Gen) genList.get(i).clone());
+        Chromosome chromosome = new Chromosome();
+        for (Gen gen : this.gens){
+            chromosome.add((Gen) gen.clone());
         }
-        return clone;
+        return chromosome;
     }
 
     /**
