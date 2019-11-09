@@ -79,9 +79,9 @@ public class Settings extends FileGetter{
     }
     private void setValue(String key, String value){
         switch (key){
-            case "genProbability"://double
+            case "genPerMille"://double
             case "dominatorPercentage":
-            case "chromosomeProbability":{
+            case "chromosomePerMille":{
                 if(!NumberUtils.isParsable(value))
                     return;
                 double val = Double.parseDouble(value);
