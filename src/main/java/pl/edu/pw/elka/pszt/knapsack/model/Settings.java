@@ -19,9 +19,9 @@ public class Settings extends FileGetter{
     public Settings(final long initialPopulation){
         this.settingList = new ArrayList<>();
         settingList.add(new Setting("initialPopulation",initialPopulation));
-        settingList.add(new Setting("genProbability", 10D));//%
-        settingList.add(new Setting("chromosomeProbability", 10D));//%
-        settingList.add(new Setting("dominatorPercentage", 10D));
+        settingList.add(new Setting("genPerMille", 10D));//‰ * 1000
+        settingList.add(new Setting("chromosomePerMille", 10D));//‰ * 1000
+        settingList.add(new Setting("dominatorPercentage", 10D));//%
         settingList.add(new Setting("iterations", 100L));
         settingList.add(new Setting("generateChart",true));
     }
@@ -30,12 +30,12 @@ public class Settings extends FileGetter{
         return (long) getSettingValue("initialPopulation");
     }
 
-    public double getGenProbability() {
-        return (double) getSettingValue("genProbability");
+    public double getGenPerMille() {
+        return (double) getSettingValue("genPerMille");
     }
 
-    public double getChromosomeProbability() {
-        return (double) getSettingValue("chromosomeProbability");
+    public double getChromosomePerMille() {
+        return (double) getSettingValue("chromosomePerMille");
     }
 
     public double getDominatorPercentage() {

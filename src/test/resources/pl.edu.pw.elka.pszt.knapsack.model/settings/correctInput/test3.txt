@@ -1,1 +1,1 @@
-genProbability = 101
+genPerMille = 101

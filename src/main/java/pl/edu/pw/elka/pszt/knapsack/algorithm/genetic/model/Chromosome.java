@@ -61,13 +61,11 @@ public class Chromosome implements Cloneable {
             presentGens.remove(gen);
         }
     }
-    public void mutate(int genProbability) {
+    public void mutate(int genPerMile) {
         Random random = new Random(System.currentTimeMillis());
-        this.gens.forEach(gen -> {
-            if(random.nextInt(1000) <= genProbability){
-                gen.negateIsPresent();
-            }
-        });
+        this.gens.stream()
+                .filter(gen -> random.nextInt(1000) <= genPerMile)
+                .forEach(Gen::negateIsPresent);
     }
     int size() {
         return gens.size();

@@ -1,3 +1,3 @@
-genProbability = 101
+genPerMille = 101
 dominatorPercentage = 0.8
 iterations 13

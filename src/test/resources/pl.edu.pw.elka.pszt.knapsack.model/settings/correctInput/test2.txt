@@ -1,2 +1,2 @@
-genProbability = 101
+genPerMille = 101
 iterations = 1
