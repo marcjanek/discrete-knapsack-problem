@@ -1,2 +1,2 @@
-probability = 101
+genProbability = 101
 iterations = 1

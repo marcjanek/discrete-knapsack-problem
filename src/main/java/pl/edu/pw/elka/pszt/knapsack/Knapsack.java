@@ -31,7 +31,7 @@ public class Knapsack {
      */
     public void run() throws IOException, CloneNotSupportedException {
         KnapsackObjects knapsackObjects = loadInput();
-        Settings settings = loadSettings(knapsackObjects.getItems().size());
+        Settings settings = loadSettings(knapsackObjects);
         validate(knapsackObjects);
         calculate(knapsackObjects, settings);
     }
@@ -40,7 +40,7 @@ public class Knapsack {
         Algorithm algorithm = new Genetic(knapsackObjects, settings);
         String result = algorithm.calculate();
         saveOutput(result);
-        if (settings.getGenerateChart() != 0) {
+        if (settings.getGenerateChart()) {
             createChart(algorithm.getOldPopulations());
         }
     }
@@ -52,10 +52,9 @@ public class Knapsack {
         });
     }
 
-    private Settings loadSettings(int optionalInitialSize) {
-        Settings settings = new Settings();
+    private Settings loadSettings(KnapsackObjects knapsackObjects) {
+        Settings settings = new Settings(knapsackObjects.getItems().size());
         settings.initDataFromFile(settingsPath);
-        settings.setInitialPopulationIfZero(optionalInitialSize);
         return settings;
     }
 

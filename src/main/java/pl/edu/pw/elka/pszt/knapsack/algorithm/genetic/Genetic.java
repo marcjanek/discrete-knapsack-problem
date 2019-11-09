@@ -26,12 +26,12 @@ public class Genetic implements Algorithm {
     public String calculate() throws CloneNotSupportedException {
         Population population = getInitPopulation((int)settings.getInitialPopulation());
         oldPopulations = new ArrayList<>();
-        oldPopulations.add(population);
-        population = population.cycle(knapsackObjects.getKnapsackCapacity().intValue(), (int) settings.getProbability());
         while (population.getNumber() < settings.getIterations() ||
                 population.dominatorPercentage() < settings.getDominatorPercentage()) {
             oldPopulations.add(population);
-            population = population.cycle(knapsackObjects.getKnapsackCapacity().intValue(), (int) settings.getProbability());
+            population = population.cycle(knapsackObjects.getKnapsackCapacity().intValue(),
+                    (int) settings.getChromosomeProbability(),
+                    (int) settings.getGenProbability());
         }
         oldPopulations.add(population);
         return getResultString(oldPopulations);

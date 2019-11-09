@@ -61,7 +61,14 @@ public class Chromosome implements Cloneable {
             presentGens.remove(gen);
         }
     }
-
+    public void mutate(int genProbability) {
+        Random random = new Random(System.currentTimeMillis());
+        this.gens.forEach(gen -> {
+            if(random.nextInt(1000) <= genProbability){
+                gen.negateIsPresent();
+            }
+        });
+    }
     int size() {
         return gens.size();
     }
@@ -102,4 +109,6 @@ public class Chromosome implements Cloneable {
                 .filter(Gen::isPresent)
                 .collect(Collectors.toList());
     }
+
+
 }
