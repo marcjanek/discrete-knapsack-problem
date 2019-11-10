@@ -20,7 +20,7 @@ public class Settings extends FileGetter{
         this.settingList = new ArrayList<>();
         settingList.add(new Setting("initialPopulation",initialPopulation));
         settingList.add(new Setting("chromosomePerMille", 100D));//‰ * 1000
-        settingList.add(new Setting("genChance", calculateGenChance(100D)));//0 - 1
+        settingList.add(new Setting("genChance", calculateGenProbability(100D)));//0 - 1
         settingList.add(new Setting("dominatorPercentage", 10D));//%
         settingList.add(new Setting("iterations", 100L));
         settingList.add(new Setting("generateChart",true));
@@ -30,7 +30,7 @@ public class Settings extends FileGetter{
         return (long) getSettingValue("initialPopulation");
     }
 
-    public double getGenChance() {
+    public double getProbability() {
         return (double) getSettingValue("genChance");
     }
 
@@ -80,7 +80,7 @@ public class Settings extends FileGetter{
     }
     private void setValue(String key, String value){
         switch (key){
-            case "genProbability"://double //TODO można wywalić możliwość wprowadzenia(jak zbyt skomplikowane to zostawić i nie mówić)
+            case "genChance"://double
             case "dominatorPercentage": {
                 if (!NumberUtils.isParsable(value))
                     return;

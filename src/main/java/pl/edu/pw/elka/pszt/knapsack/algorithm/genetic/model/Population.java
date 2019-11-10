@@ -210,12 +210,10 @@ public class Population implements Cloneable {
 
     private void mutate(final double probability) {
         Random random = new Random();
-        children.parallelStream().forEach(chromosome -> {
-            chromosome.getGens()
-                    .stream()
-                    .filter(gen -> random.nextDouble() <= probability)
-                    .forEach(Gen::negateIsPresent);
-        });
+        children.parallelStream().forEach(chromosome -> chromosome.getGens()
+                .stream()
+                .filter(gen -> random.nextDouble() <= probability)
+                .forEach(Gen::negateIsPresent));
     }
 
     private Population nextGeneration() {
