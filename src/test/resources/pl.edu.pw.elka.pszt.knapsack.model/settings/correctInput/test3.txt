@@ -1,1 +1,1 @@
-genPerMille = 101
+genChance = 101

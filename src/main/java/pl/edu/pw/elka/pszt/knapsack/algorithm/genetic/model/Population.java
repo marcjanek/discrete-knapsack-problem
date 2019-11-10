@@ -40,16 +40,14 @@ public class Population implements Cloneable {
      * method performs one cycle of genetic algorithm
      *
      * @param maxVolume   the max volume
-     * @param chromosomePerMile the chromosome Per-mile chance to mutate
-     * @param genPerMile thx gen Per-mile chance to mutate
      * @return the population
      * @throws CloneNotSupportedException the clone not supported exception
      */
-    public Population cycle(int maxVolume, int chromosomePerMile, int genPerMile) throws CloneNotSupportedException {
+    public Population cycle(int maxVolume, double GenChance) throws CloneNotSupportedException {
         selectParents();
         crossover();
         fix(children, maxVolume);
-        mutate(chromosomePerMile, genPerMile);
+        mutate(GenChance);
         fix(children, maxVolume);
         return nextGeneration();
     }
@@ -131,7 +129,7 @@ public class Population implements Cloneable {
      */
     public String bestFound()
     {
-        String chromosomeInString,fitness, volume;
+        String chromosomeInString, fitness, volume, list = "";
         if(chromosomes.isEmpty()){
             chromosomeInString = "null";
             fitness = String.valueOf(Double.NaN);
@@ -142,8 +140,9 @@ public class Population implements Cloneable {
             chromosomeInString = chromosome.toString();
             fitness = String.valueOf(chromosome.fitness());
             volume = String.valueOf(chromosome.volume());
+            list = chromosome.listItems();
         }
-        return String.format("Best found: %s Fitness: %s Volume: %s",chromosomeInString, fitness,volume);
+        return String.format("Best found: %s Fitness: %s Volume: %s \nList of items:\n%s", chromosomeInString, fitness, volume, list);
     }
 
     /**
@@ -209,11 +208,12 @@ public class Population implements Cloneable {
         });
     }
 
-    private void mutate(int chromosomePerMile, int genPerMile) {
-        final Random random = new Random();
-        children.stream()
-                .filter(chromosome -> random.nextInt(1000) <= chromosomePerMile)
-                .forEach(chromosome -> chromosome.mutate(genPerMile));
+    private void mutate(final double probability) {
+        Random random = new Random();
+        children.parallelStream().forEach(chromosome -> chromosome.getGens()
+                .stream()
+                .filter(gen -> random.nextDouble() <= probability)
+                .forEach(Gen::negateIsPresent));
     }
 
     private Population nextGeneration() {
