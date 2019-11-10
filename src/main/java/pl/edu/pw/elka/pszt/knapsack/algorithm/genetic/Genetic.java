@@ -31,7 +31,7 @@ public class Genetic implements Algorithm {
                 population.dominatorPercentage() < settings.getDominatorPercentage()) {
             oldPopulations.add(population);
             population = population.cycle(knapsackObjects.getKnapsackCapacity().intValue(),
-                    settings.getGenChance());
+                    settings.getProbability());
         }
         oldPopulations.add(population);
         return getResultString(oldPopulations);

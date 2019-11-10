@@ -129,7 +129,7 @@ public class Population implements Cloneable {
      */
     public String bestFound()
     {
-        String chromosomeInString,fitness, volume;
+        String chromosomeInString, fitness, volume, list = "";
         if(chromosomes.isEmpty()){
             chromosomeInString = "null";
             fitness = String.valueOf(Double.NaN);
@@ -140,8 +140,9 @@ public class Population implements Cloneable {
             chromosomeInString = chromosome.toString();
             fitness = String.valueOf(chromosome.fitness());
             volume = String.valueOf(chromosome.volume());
+            list = chromosome.listItems();
         }
-        return String.format("Best found: %s Fitness: %s Volume: %s",chromosomeInString, fitness,volume);
+        return String.format("Best found: %s Fitness: %s Volume: %s \nList of items:\n%s", chromosomeInString, fitness, volume, list);
     }
 
     /**

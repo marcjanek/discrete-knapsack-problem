@@ -4,10 +4,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.lang.ref.Cleaner;
-import java.lang.ref.PhantomReference;
-import java.lang.ref.Reference;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -41,7 +37,7 @@ public class Chromosome implements Cloneable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         Chromosome chromosome = new Chromosome();
-        for (Gen gen : this.gens){
+        for (Gen gen : this.gens) {
             chromosome.add((Gen) gen.clone());
         }
         return chromosome;
@@ -61,12 +57,17 @@ public class Chromosome implements Cloneable {
             presentGens.remove(gen);
         }
     }
-    public void mutate(int genPerMile) {
-        Random random = new Random(System.currentTimeMillis());
-        this.gens.stream()
-                .filter(gen -> random.nextInt(1000) <= genPerMile)
-                .forEach(Gen::negateIsPresent);
+
+    String listItems() {
+        StringBuilder out = new StringBuilder();
+        for (Gen gen : gens) {
+            if (gen.isPresent) {
+                out.append(gen.getVolume()).append(" ").append(gen.getValue()).append("\n");
+            }
+        }
+        return out.toString();
     }
+
     int size() {
         return gens.size();
     }
