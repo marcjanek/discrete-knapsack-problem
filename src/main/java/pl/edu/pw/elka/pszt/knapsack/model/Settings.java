@@ -21,7 +21,7 @@ public class Settings extends FileGetter{
         settingList.add(new Setting("initialPopulation",initialPopulation));
         settingList.add(new Setting("genChance", calculateGenChance(100D)));//0 - 1
         settingList.add(new Setting("dominatorPercentage", 10D));//%
-        settingList.add(new Setting("iterations", 100L));
+        settingList.add(new Setting("iterations", 500L));
         settingList.add(new Setting("generateChart",true));
     }
 
