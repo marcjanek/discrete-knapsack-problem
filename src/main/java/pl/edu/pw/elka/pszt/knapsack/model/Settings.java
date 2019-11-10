@@ -20,7 +20,7 @@ public class Settings extends FileGetter{
         this.settingList = new ArrayList<>();
         settingList.add(new Setting("initialPopulation",initialPopulation));
         settingList.add(new Setting("chromosomePerMille", 100D));//‰ * 1000
-        settingList.add(new Setting("genPerMille", calculategenPerMille(100D)));//‰ * 1000
+        settingList.add(new Setting("genChance", calculateGenChance(100D)));//0 - 1
         settingList.add(new Setting("dominatorPercentage", 10D));//%
         settingList.add(new Setting("iterations", 100L));
         settingList.add(new Setting("generateChart",true));
@@ -30,8 +30,8 @@ public class Settings extends FileGetter{
         return (long) getSettingValue("initialPopulation");
     }
 
-    public double getGenPerMille() {
-        return (double) getSettingValue("genPerMille");
+    public double getGenChance() {
+        return (double) getSettingValue("genChance");
     }
 
     public double getDominatorPercentage() {
@@ -74,13 +74,13 @@ public class Settings extends FileGetter{
         }
     }
 
-    private double calculategenPerMille(double chromosomePerMille) {
+    private double calculateGenChance(double chromosomePerMille) {
         double x = getInitialPopulation();
         return 1 - Math.pow(1 - chromosomePerMille / 1000, 1 / x);
     }
     private void setValue(String key, String value){
         switch (key){
-            case "genPerMille"://double
+            case "genChance"://double
             case "dominatorPercentage": {
                 if (!NumberUtils.isParsable(value))
                     return;
@@ -97,7 +97,7 @@ public class Settings extends FileGetter{
                 if(val < 0)
                     return;
                 setSetting(key, val);
-                setSetting("chromosomePerMille", calculategenPerMille(val));
+                setSetting("chromosomePerMille", calculateGenChance(val));
             }
             break;
             case "iterations"://long
