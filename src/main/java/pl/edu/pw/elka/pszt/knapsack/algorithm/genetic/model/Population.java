@@ -43,11 +43,11 @@ public class Population implements Cloneable {
      * @return the population
      * @throws CloneNotSupportedException the clone not supported exception
      */
-    public Population cycle(int maxVolume, double genPerMile) throws CloneNotSupportedException {
+    public Population cycle(int maxVolume, double GenChance) throws CloneNotSupportedException {
         selectParents();
         crossover();
         fix(children, maxVolume);
-        mutate(genPerMile);
+        mutate(GenChance);
         fix(children, maxVolume);
         return nextGeneration();
     }
@@ -210,14 +210,12 @@ public class Population implements Cloneable {
 
     private void mutate(final double probability) {
         Random random = new Random();
-        for (Chromosome child : children) {
-            for (Gen gen : child.gens) {
-                double randomNumber = random.nextDouble();
-                if (randomNumber <= probability) {
-                    gen.negateIsPresent();
-                }
-            }
-        }
+        children.parallelStream().forEach(chromosome -> {
+            chromosome.getGens()
+                    .stream()
+                    .filter(gen -> random.nextDouble() <= probability)
+                    .forEach(Gen::negateIsPresent);
+        });
     }
 
     private Population nextGeneration() {
