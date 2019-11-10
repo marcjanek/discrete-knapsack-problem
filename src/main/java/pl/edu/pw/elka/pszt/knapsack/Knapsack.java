@@ -70,7 +70,7 @@ public class Knapsack {
                     Arrays.toString(knapsackObjects.getItems().toArray()));
     }
 
-    private void saveOutput(String string) throws IOException {
+    public void saveOutput(String string) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath));
         writer.write(string);
         writer.close();

@@ -30,7 +30,7 @@ class KnapsackDataLoaderTest {
         @Test
         @DisplayName("4 items")
         void test1() throws IOException {
-            String path = PATH + "correctInput/test1.txt";
+            String path = PATH + "correctInput/test1.txt.txt";
             test(loadFile(path).split("\n"), new KnapsackDataLoader(path).load());
         }
 
@@ -66,7 +66,7 @@ class KnapsackDataLoaderTest {
         @Test
         @DisplayName("no capacity")
         void test1() {
-            test("Capacity must be number, but found: 1 01", PATH + "exceptions/test1.txt");
+            test("Capacity must be number, but found: 1 01", PATH + "exceptions/test1.txt.txt");
         }
 
         @Test

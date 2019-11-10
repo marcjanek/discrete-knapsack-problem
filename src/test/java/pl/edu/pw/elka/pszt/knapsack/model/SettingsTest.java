@@ -25,7 +25,7 @@ class SettingsTest {
         @Test
         @DisplayName("3 values")
         void test1() {
-            String path = PATH + "correctInput/test1.txt";
+            String path = PATH + "correctInput/test1.txt.txt";
             settings.initDataFromFile(path);
             assertEquals(101, settings.getProbability());
             assertEquals(0.8,settings.getDominatorPercentage());
@@ -58,7 +58,7 @@ class SettingsTest {
         @Test
         @DisplayName("less then 0")
         void test1() {
-            String path = PATH + "exceptions/test1.txt";
+            String path = PATH + "exceptions/test1.txt.txt";
             settings.initDataFromFile(path);
             assertEquals(101, settings.getProbability());
             assertEquals(0.8,settings.getDominatorPercentage());
