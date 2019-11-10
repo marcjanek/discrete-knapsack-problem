@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 public class Chromosome implements Cloneable {
 
-    final List<Gen> gens = new ArrayList<>();
+    private final List<Gen> gens = new ArrayList<>();
 
     public void add(Gen gen) {
         gens.add(gen);

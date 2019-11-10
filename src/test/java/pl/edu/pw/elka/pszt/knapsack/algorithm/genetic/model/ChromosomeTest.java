@@ -36,7 +36,7 @@ class ChromosomeTest {
         void test1() throws CloneNotSupportedException {
             Object clone = emptyChromosome.clone();
             assertNotSame(emptyChromosome, clone);
-            assertNotSame(emptyChromosome.gens,((Chromosome) clone).gens);
+            assertNotSame(emptyChromosome.getGens(),((Chromosome) clone).getGens());
         }
 
         @Test
@@ -44,8 +44,8 @@ class ChromosomeTest {
         void test2() throws CloneNotSupportedException {
             final Chromosome clone = (Chromosome) filledChromosome.clone();
             assertNotSame(emptyChromosome, clone);
-            assertNotSame(emptyChromosome.gens,clone.gens);
-            List<Gen> gens = emptyChromosome.gens;
+            assertNotSame(emptyChromosome.getGens(),clone.getGens());
+            List<Gen> gens = emptyChromosome.getGens();
             for (int i = 0; i < gens.size(); i++) {
                 assertNotSame(emptyChromosome.getGen((long)i),clone.getGen((long)i));
             }
@@ -57,20 +57,20 @@ class ChromosomeTest {
         @Test
         @DisplayName("add gen to empty list")
         void test1() {
-            assertEquals(0, emptyChromosome.gens.size());
+            assertEquals(0, emptyChromosome.getGens().size());
             emptyChromosome.add(new Gen(1L, 2L));
-            assertEquals(1, emptyChromosome.gens.size());
+            assertEquals(1, emptyChromosome.getGens().size());
         }
 
         @Test
         @DisplayName("80 number of new items")
         void test2() {
             final int NUMBER_OF_ITEMS = 80;
-            assertEquals(0, emptyChromosome.gens.size());
+            assertEquals(0, emptyChromosome.getGens().size());
             for (int i = 0; i < NUMBER_OF_ITEMS; ++i) {
                 emptyChromosome.add(new Gen(1L, 2L));
             }
-            assertEquals(NUMBER_OF_ITEMS, emptyChromosome.gens.size());
+            assertEquals(NUMBER_OF_ITEMS, emptyChromosome.getGens().size());
         }
     }
 
@@ -79,15 +79,15 @@ class ChromosomeTest {
         @Test
         @DisplayName("empty list")
         void test1() {
-            assertEquals(0, emptyChromosome.gens.size());
+            assertEquals(0, emptyChromosome.getGens().size());
             assertEquals(0, emptyChromosome.volume());
         }
 
         @Test
         @DisplayName("filled list")
         void test2() {
-            assertEquals(SIZE_OF_FILLED_CHROMOSOME, filledChromosome.gens.size());
-            assertEquals(sum(filledChromosome.gens), filledChromosome.volume());
+            assertEquals(SIZE_OF_FILLED_CHROMOSOME, filledChromosome.getGens().size());
+            assertEquals(sum(filledChromosome.getGens()), filledChromosome.volume());
         }
 
         int sum(List<Gen> list) {
@@ -106,7 +106,7 @@ class ChromosomeTest {
         @Test
         @DisplayName("empty list with max value 0")
         void test1() {
-            assertEquals(EMPTY_SIZE, emptyChromosome.gens.size());
+            assertEquals(EMPTY_SIZE, emptyChromosome.getGens().size());
             emptyChromosome.fix(EMPTY_SIZE);
             assertEquals(emptyChromosome.volume(), EMPTY_SIZE);
         }
@@ -114,7 +114,7 @@ class ChromosomeTest {
         @Test
         @DisplayName("empty list with max value -1")
         void test2() {
-            assertEquals(EMPTY_SIZE, emptyChromosome.gens.size());
+            assertEquals(EMPTY_SIZE, emptyChromosome.getGens().size());
             emptyChromosome.fix(NEGATIVE_SIZE);
             assertEquals(emptyChromosome.volume(), EMPTY_SIZE);
         }
@@ -122,7 +122,7 @@ class ChromosomeTest {
         @Test
         @DisplayName("empty list with max value 10")
         void test3() {
-            assertEquals(EMPTY_SIZE, emptyChromosome.gens.size());
+            assertEquals(EMPTY_SIZE, emptyChromosome.getGens().size());
             emptyChromosome.fix(POSITIVE_SIZE);
             assertEquals(emptyChromosome.volume(), EMPTY_SIZE);
         }
@@ -130,7 +130,7 @@ class ChromosomeTest {
         @Test
         @DisplayName("filled list with max value -1")
         void test4() {
-            assertEquals(SIZE_OF_FILLED_CHROMOSOME, filledChromosome.gens.size());
+            assertEquals(SIZE_OF_FILLED_CHROMOSOME, filledChromosome.getGens().size());
             filledChromosome.fix(NEGATIVE_SIZE);
             assertEquals(filledChromosome.volume(), EMPTY_SIZE);
         }
@@ -138,7 +138,7 @@ class ChromosomeTest {
         @Test
         @DisplayName("filled list with max value 0")
         void test5() {
-            assertEquals(SIZE_OF_FILLED_CHROMOSOME, filledChromosome.gens.size());
+            assertEquals(SIZE_OF_FILLED_CHROMOSOME, filledChromosome.getGens().size());
             filledChromosome.fix(EMPTY_SIZE);
             assertEquals(filledChromosome.volume(), EMPTY_SIZE);
         }
@@ -146,7 +146,7 @@ class ChromosomeTest {
         @Test
         @DisplayName("filled list with max value 10")
         void test6() {
-            assertEquals(SIZE_OF_FILLED_CHROMOSOME, filledChromosome.gens.size());
+            assertEquals(SIZE_OF_FILLED_CHROMOSOME, filledChromosome.getGens().size());
             filledChromosome.fix(EMPTY_SIZE);
             assertTrue(filledChromosome.volume() <= POSITIVE_SIZE);
         }
@@ -157,14 +157,14 @@ class ChromosomeTest {
         @Test
         @DisplayName("empty list")
         void test1() {
-            assertEquals(0, emptyChromosome.gens.size());
+            assertEquals(0, emptyChromosome.getGens().size());
             assertEquals(0, emptyChromosome.size());
         }
 
         @Test
         @DisplayName("filled list")
         void test2() {
-            assertEquals(SIZE_OF_FILLED_CHROMOSOME, filledChromosome.gens.size());
+            assertEquals(SIZE_OF_FILLED_CHROMOSOME, filledChromosome.getGens().size());
             assertEquals(SIZE_OF_FILLED_CHROMOSOME, filledChromosome.size());
         }
     }
@@ -199,19 +199,21 @@ class ChromosomeTest {
         @Test
         @DisplayName("filled list with zero index")
         void test3() {
-            assertSame(filledChromosome.gens.get((int) ZERO_INDEX), filledChromosome.getGen(ZERO_INDEX));
+            assertSame(filledChromosome.getGens().get((int) ZERO_INDEX), filledChromosome.getGen(ZERO_INDEX));
         }
 
         @Test
         @DisplayName("filled list with middle index")
         void test5() {
-            assertSame(filledChromosome.gens.get((SIZE_OF_FILLED_CHROMOSOME - 1) / 2), filledChromosome.getGen((long) (SIZE_OF_FILLED_CHROMOSOME - 1) / 2));
+            assertSame(filledChromosome.getGens().get((SIZE_OF_FILLED_CHROMOSOME - 1) / 2),
+                    filledChromosome.getGen((long) (SIZE_OF_FILLED_CHROMOSOME - 1) / 2));
         }
 
         @Test
         @DisplayName("filled list with last index")
         void test6() {
-            assertSame(filledChromosome.gens.get(SIZE_OF_FILLED_CHROMOSOME - 1), filledChromosome.getGen((long) (SIZE_OF_FILLED_CHROMOSOME - 1)));
+            assertSame(filledChromosome.getGens().get(SIZE_OF_FILLED_CHROMOSOME - 1),
+                    filledChromosome.getGen((long) (SIZE_OF_FILLED_CHROMOSOME - 1)));
         }
     }
 
@@ -279,15 +281,15 @@ class ChromosomeTest {
         @Test
         @DisplayName("empty list")
         void test1() {
-            assertEquals(0, emptyChromosome.gens.size());
+            assertEquals(0, emptyChromosome.getGens().size());
             assertEquals(0, emptyChromosome.fitness());
         }
 
         @Test
         @DisplayName("filled list")
         void test2() {
-            assertEquals(SIZE_OF_FILLED_CHROMOSOME, filledChromosome.gens.size());
-            assertEquals(sum(filledChromosome.gens), filledChromosome.fitness());
+            assertEquals(SIZE_OF_FILLED_CHROMOSOME, filledChromosome.getGens().size());
+            assertEquals(sum(filledChromosome.getGens()), filledChromosome.fitness());
         }
 
         int sum(List<Gen> list) {

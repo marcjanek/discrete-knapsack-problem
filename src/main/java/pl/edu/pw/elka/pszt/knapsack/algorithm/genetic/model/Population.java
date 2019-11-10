@@ -114,7 +114,7 @@ public class Population implements Cloneable {
         StringBuilder text = new StringBuilder();
         text.append("Population ").append(String.format("%5s", number + 1)).append(": ");
         for (Chromosome chromosome : chromosomes) {
-            for (Gen gen : chromosome.gens) {
+            for (Gen gen : chromosome.getGens()) {
                 text.append(gen.toString());
             }
             text.append(" ");
@@ -127,22 +127,32 @@ public class Population implements Cloneable {
      *
      * @return the string
      */
-    public String bestFound()
+    public String bestFound(boolean printDetails)
     {
-        String chromosomeInString, fitness, volume, list = "";
-        if(chromosomes.isEmpty()){
-            chromosomeInString = "null";
-            fitness = String.valueOf(Double.NaN);
-            volume = String.valueOf(Double.NaN);
-        } else {
-            sort(chromosomes);
-            Chromosome chromosome = chromosomes.get(0);
-            chromosomeInString = chromosome.toString();
-            fitness = String.valueOf(chromosome.fitness());
-            volume = String.valueOf(chromosome.volume());
-            list = chromosome.listItems();
+        if(printDetails){
+            String chromosomeInString, fitness, volume, list = "";
+            if(chromosomes.isEmpty()){
+                chromosomeInString = "null";
+                fitness = String.valueOf(Double.NaN);
+                volume = String.valueOf(Double.NaN);
+            } else {
+                sort(chromosomes);
+                Chromosome chromosome = chromosomes.get(0);
+                chromosomeInString = chromosome.toString();
+                fitness = String.valueOf(chromosome.fitness());
+                volume = String.valueOf(chromosome.volume());
+                list = chromosome.listItems();
+            }
+            return String.format("Best found: %s Fitness: %s Volume: %s \nList of items:\n%s", chromosomeInString, fitness, volume, list);
+        } else{
+            if(chromosomes.isEmpty()){
+                return "";
+            } else {
+                sort(chromosomes);
+                return chromosomes.get(0).listItems();
+            }
         }
-        return String.format("Best found: %s Fitness: %s Volume: %s \nList of items:\n%s", chromosomeInString, fitness, volume, list);
+
     }
 
     /**

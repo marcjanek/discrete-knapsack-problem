@@ -34,21 +34,26 @@ public class Genetic implements Algorithm {
                     settings.getProbability());
         }
         oldPopulations.add(population);
-        return getResultString(oldPopulations);
+        return getResultString(oldPopulations, settings.getPrintOldPopulations());
     }
 
-    private String getResultString(List<Population> populations) {
+    private String getResultString(List<Population> populations, boolean printOldPopulations) {
         StringBuilder text = new StringBuilder();
-        for (int i = 0; i < populations.size() - 1; i++) {
-            text.append(populations.get(i).toString()).append("\n");
+        if(printOldPopulations){
+            for (int i = 0; i < populations.size() - 1; i++) {
+                text.append(populations.get(i).toString()).append("\n");
+            }
         }
-        if (populations.size() > 0)
-            text.append("result:")
-                    .append("\n")
-                    .append(populations.get(populations.size() - 1).toString())
-                    .append("\n")
-                    .append(populations.get(populations.size() - 1).bestFound())
-                    .append("\n");
+        if (populations.size() > 0){
+            if(printOldPopulations){
+                text.append("result:")
+                        .append("\n")
+                        .append(populations.get(populations.size() - 1).toString())
+                        .append("\n");
+            }
+            text.append(populations.get(populations.size() - 1).bestFound(printOldPopulations));
+        }
+
         return text.toString();
     }
 

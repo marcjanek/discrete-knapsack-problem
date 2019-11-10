@@ -24,6 +24,7 @@ public class Settings extends FileGetter{
         settingList.add(new Setting("dominatorPercentage", 10D));//%
         settingList.add(new Setting("iterations", 100L));
         settingList.add(new Setting("generateChart",true));
+        settingList.add(new Setting("printOldPopulations", true));
     }
 
     public long getInitialPopulation() {
@@ -44,6 +45,9 @@ public class Settings extends FileGetter{
 
     public boolean getGenerateChart() {
         return (boolean) getSettingValue("generateChart");
+    }
+    public boolean getPrintOldPopulations(){
+        return (boolean) getSettingValue("printOldPopulations");
     }
     public void setSetting(String key,Object value){
         List<Setting> collect = this.settingList.stream().filter(e -> e.getName().equals(key)).collect(Collectors.toList());
@@ -111,6 +115,7 @@ public class Settings extends FileGetter{
             }
             break;
             case "generateChart"://boolean
+            case "printOldPopulations":
             {
                 if(isBooleanParsable(value)){
                     setSetting(key,Boolean.parseBoolean(value));
