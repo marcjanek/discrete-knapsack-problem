@@ -19,7 +19,7 @@ public class Settings extends FileGetter{
         settingList.add(new Setting("chromosomePerMille", 100D));//‰ * 1000
         settingList.add(new Setting("genChance", calculateGenProbability(100D)));//0 - 1
         settingList.add(new Setting("dominatorPercentage", 10D));//%
-        settingList.add(new Setting("iterations", 100L));
+        settingList.add(new Setting("iterations", 95L));
         settingList.add(new Setting("generateChart",true));
         settingList.add(new Setting("printOldPopulations", true));
     }

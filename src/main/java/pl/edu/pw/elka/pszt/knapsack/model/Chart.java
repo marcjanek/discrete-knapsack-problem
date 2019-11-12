@@ -32,14 +32,14 @@ public class Chart extends JFrame {
 
         xySeriesCollection.addSeries(createSeries("average",
                 populations.stream()
-                        .filter(e -> e.getNumber() % (populations.size() / 100) == 0)
+                        .filter(e -> e.getNumber() % getFrequency(populations.size()) == 0)
                         .map(e -> new Point(e.getNumber().intValue(),
                                 (int) e.getAverageFitness())).collect(Collectors.toList())
                 )
         );
         xySeriesCollection.addSeries(createSeries("max",
                 populations.stream()
-                        .filter(e -> e.getNumber() % (populations.size() / 100) == 0)
+                        .filter(e -> e.getNumber() % getFrequency(populations.size()) == 0)
                         .map(e -> new Point(e.getNumber().intValue(),
                                 (int) e.getMaxFitness())).collect(Collectors.toList())
                 )
@@ -47,7 +47,7 @@ public class Chart extends JFrame {
 
         xySeriesCollection.addSeries(createSeries("min",
                 populations.stream()
-                        .filter(e -> e.getNumber() % (populations.size() / 100) == 0)
+                        .filter(e -> e.getNumber() % getFrequency(populations.size()) == 0)
                         .map(e -> new Point(e.getNumber().intValue(),
                                 (int) e.getMinFitness())).collect(Collectors.toList())
                 )
@@ -62,6 +62,9 @@ public class Chart extends JFrame {
         setTitle("Genetic populations");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+    private int getFrequency(final int size){
+        return size / 100 == 0 ? 1: size/100;
     }
 
     private XYSeries createSeries(String name, List<Point> list) {
