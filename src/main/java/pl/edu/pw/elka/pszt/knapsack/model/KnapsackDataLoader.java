@@ -5,19 +5,10 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.IOException;
 
-/**
- * The type Knapsack data loader.
- */
 @AllArgsConstructor
 public class KnapsackDataLoader extends FileGetter {
     private final String inputPath;
 
-    /**
-     * Load knapsack objects. And validates input file
-     *
-     * @return the knapsack objects
-     * @throws IOException the io exception
-     */
     public KnapsackObjects load() throws IOException {
         String inputData = getDataFromFile(inputPath);
         return setInputKnapsackObjects(inputData);

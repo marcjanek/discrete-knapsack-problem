@@ -14,21 +14,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * The type Knapsack.
- */
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Knapsack {
     private final String inputPath, outputPath;
     private String settingsPath;
 
-    /**
-     * Run all program functionality.
-     *
-     * @throws IOException                the io exception
-     * @throws CloneNotSupportedException the clone not supported exception
-     */
     public void run() throws IOException, CloneNotSupportedException {
         KnapsackObjects knapsackObjects = loadInput();
         Settings settings = loadSettings(knapsackObjects);

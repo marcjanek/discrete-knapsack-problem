@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * The type Settings.
- */
 @Getter @Setter
 public class Settings extends FileGetter{
     private final List<Setting> settingList;
@@ -56,11 +53,6 @@ public class Settings extends FileGetter{
         }
     }
 
-    /**
-     * Init data from file.
-     *
-     * @param inputPath the input path
-     */
     public void initDataFromFile(String inputPath){
         if (Objects.isNull(inputPath))
             return;

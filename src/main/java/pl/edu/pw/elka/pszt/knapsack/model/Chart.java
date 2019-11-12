@@ -19,17 +19,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-/**
- * The type Chart.
- */
 public class Chart extends JFrame {
     private final List<Population> populations;
 
-    /**
-     * Instantiates a new Chart.
-     *
-     * @param populations the populations
-     */
     public Chart(List<Population> populations) {
         this.populations = populations;
         initUI();
