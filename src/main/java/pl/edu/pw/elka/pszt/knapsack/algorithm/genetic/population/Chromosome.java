@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
+package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -26,6 +26,7 @@ public class Chromosome implements Cloneable {
                 .sum();
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public Object clone() throws CloneNotSupportedException {
         Chromosome chromosome = new Chromosome();
@@ -48,7 +49,7 @@ public class Chromosome implements Cloneable {
     String listItems() {
         StringBuilder out = new StringBuilder();
         for (Gen gen : gens) {
-            if (gen.isPresent) {
+            if (gen.isPresent()) {
                 out.append(gen.getVolume()).append(" ").append(gen.getValue()).append("\n");
             }
         }

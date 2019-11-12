@@ -11,7 +11,7 @@ import org.jfree.chart.title.TextTitle;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Population;
+import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population.Population;
 
 import javax.swing.*;
 import java.awt.*;

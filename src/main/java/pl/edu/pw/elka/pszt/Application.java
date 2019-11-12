@@ -12,7 +12,7 @@ class Application {
     public static void main(String[] args) {
         try{
             if (Objects.isNull(args)) {
-                System.out.println("Expected are two can't be null");
+                System.out.println("input args can't be null");
             } else if (args.length == NUMBER_OF_REQUIRED_ARGS) {
                 new Knapsack(args[0], args[1]).run();
             } else if (args.length == NUMBER_OF_REQUIRED_ARGS + NUMBER_OF_OPTIONAL_ARGS) {

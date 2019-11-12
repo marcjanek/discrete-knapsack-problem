@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
+package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -20,6 +20,7 @@ public class Population implements Cloneable {
     private final List<Chromosome> parents = new ArrayList<>();
     private final List<Chromosome> children = new ArrayList<>();
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public Object clone() throws CloneNotSupportedException {
         Population clone = new Population(this.number + 1);

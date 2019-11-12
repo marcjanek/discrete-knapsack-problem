@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.Algorithm;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.Genetic;
-import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Population;
+import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population.Population;
 import pl.edu.pw.elka.pszt.knapsack.model.*;
 
 import javax.swing.*;

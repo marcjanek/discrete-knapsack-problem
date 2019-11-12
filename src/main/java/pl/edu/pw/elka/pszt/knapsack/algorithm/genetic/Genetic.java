@@ -3,9 +3,9 @@ package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.Algorithm;
-import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Chromosome;
-import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Gen;
-import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Population;
+import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population.Chromosome;
+import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population.Gen;
+import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population.Population;
 import pl.edu.pw.elka.pszt.knapsack.model.KnapsackObjects;
 import pl.edu.pw.elka.pszt.knapsack.model.Settings;
 

@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
+package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,11 +12,11 @@ class GenTest {
     @Test
     void testClone() throws CloneNotSupportedException {
         Gen gen = new Gen(1L, 2L);
-        gen.isPresent = false;
+        gen.setPresent(false);
         Gen clone = (Gen) gen.clone();
-        gen.isPresent = true;
+        gen.setPresent(true);
         assertNotSame(gen, clone);
-        assertNotEquals(clone.isPresent, gen.isPresent);
+        assertNotEquals(clone.isPresent(), gen.isPresent());
     }
 
     @Nested
@@ -54,18 +54,18 @@ class GenTest {
         @Test
         @DisplayName("Default value negation")
         void test1() {
-            assertFalse(gen.isPresent);
+            assertFalse(gen.isPresent());
             gen.negateIsPresent();
-            assertTrue(gen.isPresent);
+            assertTrue(gen.isPresent());
         }
 
         @Test
         @DisplayName("Double value negation")
         void test2() {
-            final boolean before = gen.isPresent;
+            final boolean before = gen.isPresent();
             gen.negateIsPresent();
             gen.negateIsPresent();
-            final boolean after = gen.isPresent;
+            final boolean after = gen.isPresent();
             assertEquals(before, after);
         }
     }

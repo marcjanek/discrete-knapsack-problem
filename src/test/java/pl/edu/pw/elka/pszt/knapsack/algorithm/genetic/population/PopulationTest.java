@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
+package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -7,18 +7,16 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 class PopulationTest {
     
     Population emptyPopulation;
     Population oneChromosomePopulation;
     Population filledPopulation;
-    private final int EMPTY_POPULATION_SIZE = 0;
-    private final int ONE_CHROMOSOME_POPULATION_SIZE = 1;
     private final int FILLED_POPULATION_SIZE = 10;
-    private final int CHROMOSOME_LENGTH = 5;
-    
+
     @BeforeEach
     void init(){
         emptyPopulation = new Population(0L);
@@ -31,10 +29,11 @@ class PopulationTest {
     }
     Chromosome creteChromosome(){
         Chromosome chromosome = new Chromosome();
+        int CHROMOSOME_LENGTH = 5;
         for (int i = 0; i < CHROMOSOME_LENGTH; i++) {
             Gen gen = new Gen((long) i % FILLED_POPULATION_SIZE,
                     (long) (i * i) % FILLED_POPULATION_SIZE);
-            if(i%CHROMOSOME_LENGTH == 0){
+            if(i% CHROMOSOME_LENGTH == 0){
                 gen.setPresent(true);
             }
             chromosome.add(gen);
@@ -46,6 +45,7 @@ class PopulationTest {
         @Test
         @DisplayName("1 chromosome to empty population")
         void test1(){
+            int EMPTY_POPULATION_SIZE = 0;
             assertEquals(EMPTY_POPULATION_SIZE, emptyPopulation.getChromosomes().size());
             final Chromosome chromosome = creteChromosome();
             emptyPopulation.add(chromosome);
@@ -55,6 +55,7 @@ class PopulationTest {
         @Test
         @DisplayName("1 chromosome to one chromosome population")
         void test2(){
+            int ONE_CHROMOSOME_POPULATION_SIZE = 1;
             assertEquals(ONE_CHROMOSOME_POPULATION_SIZE, oneChromosomePopulation.getChromosomes().size());
             final Chromosome chromosome = creteChromosome();
             oneChromosomePopulation.add(chromosome);

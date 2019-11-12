@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
+package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +27,6 @@ class ChromosomeTest {
             filledChromosome.add(gen);
         }
     }
-
 
     @Nested
     class Clone{
@@ -93,7 +92,7 @@ class ChromosomeTest {
         int sum(List<Gen> list) {
             if (Objects.isNull(list))
                 return 0;
-            return list.stream().filter(e -> e.isPresent).mapToInt(e -> Math.toIntExact(e.getVolume())).sum();
+            return list.stream().filter(Gen::isPresent).mapToInt(e -> Math.toIntExact(e.getVolume())).sum();
         }
     }
 
@@ -295,7 +294,7 @@ class ChromosomeTest {
         int sum(List<Gen> list) {
             if (Objects.isNull(list))
                 return 0;
-            return list.stream().filter(e -> e.isPresent).mapToInt(e -> Math.toIntExact(e.getValue())).sum();
+            return list.stream().filter(Gen::isPresent).mapToInt(e -> Math.toIntExact(e.getValue())).sum();
         }
     }
 }
