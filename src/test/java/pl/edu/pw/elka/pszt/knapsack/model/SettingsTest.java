@@ -14,7 +14,7 @@ class SettingsTest {
     private Settings settings;
     @BeforeEach
     void init(){
-        settings = new Settings();
+        settings = new Settings(10L);
     }
 
 
@@ -27,7 +27,7 @@ class SettingsTest {
         void test1() {
             String path = PATH + "correctInput/test1.txt";
             settings.initDataFromFile(path);
-            assertEquals(101,settings.getProbability());
+            assertEquals(101, settings.getProbability());
             assertEquals(0.8,settings.getDominatorPercentage());
             assertEquals(1,settings.getIterations());
         }
@@ -37,8 +37,8 @@ class SettingsTest {
         void test2() {
             String path = PATH + "correctInput/test2.txt";
             settings.initDataFromFile(path);
-            assertEquals(101,settings.getProbability());
-            assertEquals(new Settings().getDominatorPercentage(),settings.getDominatorPercentage());
+            assertEquals(101, settings.getProbability());
+            assertEquals(new Settings(10L).getDominatorPercentage(),settings.getDominatorPercentage());
             assertEquals(1,settings.getIterations());
         }
 
@@ -47,9 +47,9 @@ class SettingsTest {
         void test3() {
             String path = PATH + "correctInput/test3.txt";
             settings.initDataFromFile(path);
-            assertEquals(101,settings.getProbability());
-            assertEquals(new Settings().getDominatorPercentage(),settings.getDominatorPercentage());
-            assertEquals(new Settings().getIterations(),settings.getIterations());
+            assertEquals(101, settings.getProbability());
+            assertEquals(new Settings(10L).getDominatorPercentage(),settings.getDominatorPercentage());
+            assertEquals(new Settings(10L).getIterations(),settings.getIterations());
         }
     }
 
@@ -60,9 +60,9 @@ class SettingsTest {
         void test1() {
             String path = PATH + "exceptions/test1.txt";
             settings.initDataFromFile(path);
-            assertEquals(101,settings.getProbability());
+            assertEquals(101, settings.getProbability());
             assertEquals(0.8,settings.getDominatorPercentage());
-            assertEquals(new Settings().getProbability(),settings.getIterations());
+            assertEquals(new Settings(10L).getIterations(),settings.getIterations());
         }
 
         @Test
@@ -70,27 +70,27 @@ class SettingsTest {
         void test2() {
             String path = PATH + "exceptions/test2.txt";
             settings.initDataFromFile(path);
-            assertEquals(101,settings.getProbability());
+            assertEquals(101, settings.getProbability());
             assertEquals(0.8,settings.getDominatorPercentage());
-            assertEquals(new Settings().getProbability(),settings.getIterations());
+            assertEquals(new Settings(10L).getIterations(),settings.getIterations());
         }
         @Test
         @DisplayName("no \"=\" between key and value")
         void test3() {
             String path = PATH + "exceptions/test3.txt";
             settings.initDataFromFile(path);
-            assertEquals(101,settings.getProbability());
+            assertEquals(101, settings.getProbability());
             assertEquals(0.8,settings.getDominatorPercentage());
-            assertEquals(new Settings().getProbability(),settings.getIterations());
+            assertEquals(new Settings(10L).getIterations(),settings.getIterations());
         }
         @Test
         @DisplayName("2 \"=\" in line")
         void test4() {
             String path = PATH + "exceptions/test3.txt";
             settings.initDataFromFile(path);
-            assertEquals(101,settings.getProbability());
+            assertEquals(101, settings.getProbability());
             assertEquals(0.8,settings.getDominatorPercentage());
-            assertEquals(new Settings().getProbability(),settings.getIterations());
+            assertEquals(new Settings(10L).getIterations(),settings.getIterations());
         }
     }
 }

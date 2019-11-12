@@ -6,7 +6,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.io.IOException;
 
 @AllArgsConstructor
-public class InputLoader extends FileGetter {
+public class KnapsackDataLoader extends FileGetter {
     private final String inputPath;
 
     public KnapsackObjects load() throws IOException {
@@ -18,11 +18,11 @@ public class InputLoader extends FileGetter {
         String[] lines = inputData.split("\n");
         if (lines.length == 0)
             throw new IOException("Data in input file can't be empty");
-        KnapsackObjects iko = new KnapsackObjects(getCapacity(lines[0]));
+        KnapsackObjects knapsackObjects = new KnapsackObjects(getCapacity(lines[0]));
         for (int i = 1; i < lines.length; i++) {
-            iko.add(getKnapsackObject(lines[i]));
+            knapsackObjects.add(getKnapsackObject(lines[i]));
         }
-        return iko;
+        return knapsackObjects;
     }
 
     private Long getCapacity(String capacity) throws IOException {
@@ -39,9 +39,9 @@ public class InputLoader extends FileGetter {
             throw new IOException(String.format("Line must contain two numbers delimited with space, but found %s",
                     line));
         if (nonNumber(strings[0]))
-            throw new IOException(String.format("weight must be number, but found: %s", strings[0]));
+            throw new IOException(String.format("volume must be number, but found: %s", strings[0]));
         if (nonLong(strings[0]))
-            throw new IOException(String.format("weight must be Long, but found: %s", strings[0]));
+            throw new IOException(String.format("volume must be Long, but found: %s", strings[0]));
         if (nonNumber(strings[1]))
             throw new IOException(String.format("value must be number, but found: %s", strings[1]));
         if (nonLong(strings[1]))
@@ -51,8 +51,8 @@ public class InputLoader extends FileGetter {
 
     private boolean nonLong(String string) {
         try {
-            Long d = Long.parseLong(string);
-        } catch (NumberFormatException | NullPointerException nfe) {
+            Long.parseLong(string);
+        } catch (NumberFormatException | NullPointerException exception) {
             return true;
         }
         return false;

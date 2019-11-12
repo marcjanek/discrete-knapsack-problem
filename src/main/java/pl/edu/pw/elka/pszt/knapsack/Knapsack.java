@@ -1,9 +1,10 @@
 package pl.edu.pw.elka.pszt.knapsack;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.Algorithm;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.Genetic;
-import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Population;
+import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population.Population;
 import pl.edu.pw.elka.pszt.knapsack.model.*;
 
 import javax.swing.*;
@@ -14,22 +15,23 @@ import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class Knapsack {
-    private final String inputPath, outputPath, settingsPath;
+    private final String inputPath, outputPath;
+    private String settingsPath;
 
     public void run() throws IOException, CloneNotSupportedException {
-        KnapsackObjects iko = loadInput();
-        Settings settings = loadSettings();
-        settings.setInitialPopulation(
-                settings.getInitialPopulation() == 0 ? iko.getItems().size() : settings.getInitialPopulation()
-        );
-        validate(iko);
-        if (settings.getGenerateChart() == 0) {
-            String result = calculate(iko, settings);
-            saveOutput(result);
-        } else {
-            Algorithm algorithm = new Genetic(iko, settings);
-            algorithm.calculate();
+        KnapsackObjects knapsackObjects = loadInput();
+        Settings settings = loadSettings(knapsackObjects);
+        validate(knapsackObjects);
+        calculate(knapsackObjects, settings);
+    }
+
+    private void calculate(KnapsackObjects knapsackObjects, Settings settings) throws CloneNotSupportedException, IOException {
+        Algorithm algorithm = new Genetic(knapsackObjects, settings);
+        String result = algorithm.calculate();
+        saveOutput(result);
+        if (settings.getGenerateChart()) {
             createChart(algorithm.getOldPopulations());
         }
     }
@@ -41,30 +43,25 @@ public class Knapsack {
         });
     }
 
-    private Settings loadSettings() {
-        Settings settings = new Settings();
+    private Settings loadSettings(KnapsackObjects knapsackObjects) {
+        Settings settings = new Settings(knapsackObjects.getItems().size());
         settings.initDataFromFile(settingsPath);
         return settings;
     }
 
     private KnapsackObjects loadInput() throws IOException {
-        return new InputLoader(inputPath).load();
+        return new KnapsackDataLoader(inputPath).load();
     }
 
-    private void validate(KnapsackObjects iko) throws IOException {
-        if (!ValidateKnapsackObjects.checkCapacity(iko))
-            throw new IOException("Error in capacity. Capacity must be integer >= 0, but is: " + iko.getKnapsackCapacity());
-        if (!ValidateKnapsackObjects.checkItems(iko))
-            throw new IOException("Error in items. Value and weight for each item must be integer. All items: " +
-                    Arrays.toString(iko.getItems().toArray()));
+    private void validate(KnapsackObjects knapsackObjects) throws IOException {
+        if (!ValidateKnapsackObjects.checkCapacity(knapsackObjects))
+            throw new IOException("Error in capacity. Capacity must be integer >= 0, but is: " + knapsackObjects.getKnapsackCapacity());
+        if (!ValidateKnapsackObjects.checkItems(knapsackObjects))
+            throw new IOException("Error in items. Value and volume for each item must be integer. All items: " +
+                    Arrays.toString(knapsackObjects.getItems().toArray()));
     }
 
-    private String calculate(KnapsackObjects iko, Settings settings) throws CloneNotSupportedException {
-        Algorithm algorithm = new Genetic(iko,settings);
-        return algorithm.calculate();
-    }
-
-    private void saveOutput(String string) throws IOException {
+    public void saveOutput(String string) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath));
         writer.write(string);
         writer.close();

@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
+package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,34 +13,47 @@ import java.util.stream.Collectors;
 @ToString
 @EqualsAndHashCode
 public class Chromosome implements Cloneable {
-    List<Gen> gens = new ArrayList<>();
+
+    private final List<Gen> gens = new ArrayList<>();
 
     public void add(Gen gen) {
         gens.add(gen);
     }
 
-    public int weight() {
+    public int volume() {
         return getPresentGens().stream()
-                .mapToInt(e -> Math.toIntExact(e.getWeight()))
+                .mapToInt(e -> Math.toIntExact(e.getVolume()))
                 .sum();
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public Object clone() throws CloneNotSupportedException {
         Chromosome chromosome = new Chromosome();
-        for (Gen gen : this.gens)
+        for (Gen gen : this.gens) {
             chromosome.add((Gen) gen.clone());
+        }
         return chromosome;
     }
 
-    public void fix(final int maxWeight) {
+    public void fix(final int maxVolume) {
         Random random = new Random(System.currentTimeMillis());
         List<Gen> presentGens = this.gens.stream().filter(Gen::isPresent).collect(Collectors.toList());
-        while (weight() > maxWeight && presentGens.size() > 0) {
+        while (volume() > maxVolume && presentGens.size() > 0) {
             Gen gen = presentGens.get(random.nextInt(presentGens.size()));
             gen.negateIsPresent();
             presentGens.remove(gen);
         }
+    }
+
+    String listItems() {
+        StringBuilder out = new StringBuilder();
+        for (Gen gen : gens) {
+            if (gen.isPresent()) {
+                out.append(gen.getVolume()).append(" ").append(gen.getValue()).append("\n");
+            }
+        }
+        return out.toString();
     }
 
     int size() {
@@ -51,8 +64,8 @@ public class Chromosome implements Cloneable {
         return gens.get(Math.toIntExact(index));
     }
 
-    void changeGen(long index, Gen gen) {
-        gens.set((int) index, gen);
+    void changeGen(long index, Gen newGen) {
+        gens.set((int) index, newGen);
     }
 
     int fitness() {
@@ -63,7 +76,9 @@ public class Chromosome implements Cloneable {
 
     private List<Gen> getPresentGens() {
         return gens.stream()
-                .filter(e -> e.isPresent)
+                .filter(Gen::isPresent)
                 .collect(Collectors.toList());
     }
+
+
 }

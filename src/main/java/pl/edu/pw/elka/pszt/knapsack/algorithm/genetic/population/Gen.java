@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model;
+package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -6,13 +6,13 @@ import lombok.Setter;
 import pl.edu.pw.elka.pszt.knapsack.model.Item;
 
 @Getter
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Setter
 public class Gen extends Item implements Cloneable {
-    boolean isPresent = false;
+    private boolean isPresent = false;
 
-    public Gen(Long weight, Long value) {
-        super(weight, value);
+    public Gen(Long volume, Long value) {
+        super(volume, value);
     }
 
     @Override
@@ -21,8 +21,8 @@ public class Gen extends Item implements Cloneable {
     }
 
     @Override
-    public String toString(){
-        return isPresent ? "1":"0";
+    public String toString() {
+        return isPresent ? "1" : "0";
     }
 
     void negateIsPresent() {

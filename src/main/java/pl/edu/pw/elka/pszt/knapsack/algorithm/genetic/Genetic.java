@@ -3,9 +3,9 @@ package pl.edu.pw.elka.pszt.knapsack.algorithm.genetic;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import pl.edu.pw.elka.pszt.knapsack.algorithm.Algorithm;
-import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Chromosome;
-import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Gen;
-import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.model.Population;
+import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population.Chromosome;
+import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population.Gen;
+import pl.edu.pw.elka.pszt.knapsack.algorithm.genetic.population.Population;
 import pl.edu.pw.elka.pszt.knapsack.model.KnapsackObjects;
 import pl.edu.pw.elka.pszt.knapsack.model.Settings;
 
@@ -16,43 +16,42 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class Genetic implements Algorithm {
     @Getter
-    public  List<Population> oldPopulations;
-    private final KnapsackObjects iko;
+    public List<Population> oldPopulations;
+    private final KnapsackObjects knapsackObjects;
     private final Settings settings;
     @Override
     public String calculate() throws CloneNotSupportedException {
         Population population = getInitPopulation((int)settings.getInitialPopulation());
+        if (population.getChromosomes().size() == 0) return "";
         oldPopulations = new ArrayList<>();
-        fix(population);
-        do{
+        while (population.getNumber() < settings.getIterations() ||
+                population.dominatorPercentage() < settings.getDominatorPercentage()) {
             oldPopulations.add(population);
-            population = population.cycle(iko.knapsackCapacity.intValue(), (int)settings.getProbability());
-        } while (population.getNumber() < settings.getIterations() ||
-                population.dominatorPercentage() < settings.getDominatorPercentage());
-        oldPopulations.add(population);
-        return getResultString(oldPopulations);
-    }
-
-    private String getResultString(List<Population> populations) {
-        StringBuilder text = new StringBuilder();
-        for (int i = 0; i < populations.size() - 1; i++) {
-            text.append(populations.get(i).toString()).append("\n");
+            population = population.cycle(knapsackObjects.getKnapsackCapacity().intValue(),
+                    settings.getProbability());
         }
-        if (populations.size() > 0)
-            text.append("result:")
-                    .append("\n")
-                    .append(populations.get(populations.size() - 1).toString())
-                    .append("\n")
-                    .append(populations.get(populations.size() - 1).bestFound())
-                    .append("\n");
-        return text.toString();
+        oldPopulations.add(population);
+        return getResultString(oldPopulations, settings.getPrintOldPopulations());
     }
 
-    private void fix(Population population) {
-        population.getChromosomes()
-                .stream()
-                .filter(e->e.weight()>iko.getKnapsackCapacity())
-                .forEach(chromosome -> chromosome.fix(iko.getKnapsackCapacity().intValue()));
+    private String getResultString(List<Population> populations, boolean printOldPopulations) {
+        StringBuilder text = new StringBuilder();
+        if(printOldPopulations){
+            for (int i = 0; i < populations.size() - 1; i++) {
+                text.append(populations.get(i).toString()).append("\n");
+            }
+        }
+        if (populations.size() > 0){
+            if(printOldPopulations){
+                text.append("result:")
+                        .append("\n")
+                        .append(populations.get(populations.size() - 1).toString())
+                        .append("\n");
+            }
+            text.append(populations.get(populations.size() - 1).bestFound(printOldPopulations));
+        }
+
+        return text.toString();
     }
 
     private Population getInitPopulation(int size) throws CloneNotSupportedException {
@@ -62,6 +61,7 @@ public class Genetic implements Algorithm {
             population.add((Chromosome) chromosome.clone());
         }
         randomizeGens(population);
+        population.fixChromosomes(Math.toIntExact(knapsackObjects.getKnapsackCapacity()));
         return population;
     }
     private void randomizeGens(Population population){
@@ -71,7 +71,7 @@ public class Genetic implements Algorithm {
     }
     private Chromosome getInitChromosome(){
         Chromosome chromosome = new Chromosome();
-        iko.getItems().forEach(e->chromosome.add(new Gen(e.getWeight(),e.getValue())));
+        knapsackObjects.getItems().forEach(e -> chromosome.add(new Gen(e.getVolume(), e.getValue())));
         return chromosome;
     }
 }

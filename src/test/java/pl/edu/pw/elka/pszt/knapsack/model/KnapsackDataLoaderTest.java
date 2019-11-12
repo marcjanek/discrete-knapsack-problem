@@ -13,7 +13,7 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-class InputLoaderTest {
+class KnapsackDataLoaderTest {
     private final String PATH = "src/test/resources/pl.edu.pw.elka.pszt.knapsack.model/inputLoader/";
 
     String loadFile(String path) throws FileNotFoundException {
@@ -31,31 +31,31 @@ class InputLoaderTest {
         @DisplayName("4 items")
         void test1() throws IOException {
             String path = PATH + "correctInput/test1.txt";
-            test(loadFile(path).split("\n"), new InputLoader(path).load());
+            test(loadFile(path).split("\n"), new KnapsackDataLoader(path).load());
         }
 
         @Test
         @DisplayName("no items")
         void test2() throws IOException {
             String path = PATH + "correctInput/test2.txt";
-            test(loadFile(path).split("\n"), new InputLoader(path).load());
+            test(loadFile(path).split("\n"), new KnapsackDataLoader(path).load());
         }
 
         @Test
         @DisplayName("1 item")
         void test3() throws IOException {
             String path = PATH + "correctInput/test3.txt";
-            test(loadFile(path).split("\n"), new InputLoader(path).load());
+            test(loadFile(path).split("\n"), new KnapsackDataLoader(path).load());
         }
 
-        void test(String[] split, KnapsackObjects iko) {
-            assertEquals(Long.parseLong(split[0]), iko.getKnapsackCapacity());
-            assertEquals(split.length - 1, iko.getItems().size());
-            List<Item> items = iko.getItems();
+        void test(String[] split, KnapsackObjects knapsackObjects) {
+            assertEquals(Long.parseLong(split[0]), knapsackObjects.getKnapsackCapacity());
+            assertEquals(split.length - 1, knapsackObjects.getItems().size());
+            List<Item> items = knapsackObjects.getItems();
             for (int i = 0; i < items.size(); i++) {
                 Item e = items.get(i);
                 String[] lineValues = split[i + 1].split(" ");
-                assertEquals(Long.parseLong(lineValues[0]), e.getWeight());
+                assertEquals(Long.parseLong(lineValues[0]), e.getVolume());
                 assertEquals(Long.parseLong(lineValues[1]), e.getValue());
             }
         }
@@ -90,30 +90,30 @@ class InputLoaderTest {
         @Test
         @DisplayName("non numeric value")
         void test5() {
-            test("weight must be number, but found: 1a", PATH + "exceptions/test5.txt");
+            test("volume must be number, but found: 1a", PATH + "exceptions/test5.txt");
         }
 
         @Test
-        @DisplayName("non numeric weight")
+        @DisplayName("non numeric volume")
         void test6() {
             test("value must be number, but found: b", PATH + "exceptions/test6.txt");
         }
 
         @Test
-        @DisplayName("double in weight")
+        @DisplayName("double in volume")
         void test7() {
             test("value must be Long, but found: 123.2", PATH + "exceptions/test7.txt");
         }
 
         @Test
-        @DisplayName("double in weight")
+        @DisplayName("double in volume")
         void test8() {
             test("Capacity must be Long, but found: 10.1", PATH + "exceptions/test8.txt");
         }
 
         private void test(String expected, String path) {
             try {
-                new InputLoader(path).load();
+                new KnapsackDataLoader(path).load();
             } catch (IOException e) {
                 assertEquals(expected, e.getMessage());
                 return;

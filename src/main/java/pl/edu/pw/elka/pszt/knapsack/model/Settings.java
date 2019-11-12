@@ -5,16 +5,57 @@ import lombok.Setter;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Getter @Setter
 public class Settings extends FileGetter{
-    private double initialPopulation = 0;
-    private double probability = 100;
-    private double dominatorPercentage = 0.9;
-    private double iterations = 100;
-    private double generateChart = 1;
+    private final List<Setting> settingList;
+    public Settings(final long initialPopulation){
+        this.settingList = new ArrayList<>();
+        settingList.add(new Setting("initialPopulation",initialPopulation));
+        settingList.add(new Setting("chromosomePerMille", 100D));//‰ * 1000
+        settingList.add(new Setting("genChance", calculateGenProbability(100D)));//0 - 1
+        settingList.add(new Setting("dominatorPercentage", 10D));//%
+        settingList.add(new Setting("iterations", 95L));
+        settingList.add(new Setting("generateChart",true));
+        settingList.add(new Setting("printOldPopulations", true));
+    }
+
+    public long getInitialPopulation() {
+        return (long) getSettingValue("initialPopulation");
+    }
+
+    public double getProbability() {
+        return (double) getSettingValue("genChance");
+    }
+
+    public double getDominatorPercentage() {
+        return (double) getSettingValue("dominatorPercentage");
+    }
+
+    public long getIterations() {
+        return (long) getSettingValue("iterations");
+    }
+
+    public boolean getGenerateChart() {
+        return (boolean) getSettingValue("generateChart");
+    }
+    public boolean getPrintOldPopulations(){
+        return (boolean) getSettingValue("printOldPopulations");
+    }
+    public void setSetting(String key,Object value){
+        List<Setting> collect = this.settingList.stream().filter(e -> e.getName().equals(key)).collect(Collectors.toList());
+        if(collect.size() == 1){
+            collect.get(0).setValue(value);
+        }
+    }
 
     public void initDataFromFile(String inputPath){
+        if (Objects.isNull(inputPath))
+            return;
         String dataFromFile;
         try {
             dataFromFile = getDataFromFile(inputPath);
@@ -28,28 +69,61 @@ public class Settings extends FileGetter{
             }
         }
     }
+
+    private double calculateGenProbability(double chromosomePerMille) {
+        double x = getInitialPopulation();
+        return 1 - Math.pow(1 - chromosomePerMille / 1000, 1 / x);
+    }
     private void setValue(String key, String value){
-        if(!NumberUtils.isParsable(value))
-            return;
-        double val = Double.parseDouble(value);
-        if(val < 0)
-            return;
         switch (key){
-            case "probability":
-                probability = val;
-                break;
+            case "genChance"://double
             case "dominatorPercentage":
-                dominatorPercentage = val;
-                break;
-            case "iterations":
-                iterations= val;
-                break;
-            case "initialPopulation":
-                initialPopulation = val;
-                break;
-            case "generateChart":
-                generateChart = val;
-                break;
+            case "chromosomePerMille":{
+                if (!NumberUtils.isParsable(value))
+                    return;
+                double val = Double.parseDouble(value);
+                if (val < 0)
+                    return;
+                if(key.equals("chromosomePerMille")){
+                    setSetting(key, calculateGenProbability(val));
+                } else {
+                    setSetting(key, val);
+                }
+                setSetting(key, val);
+            }
+            break;
+            case "iterations"://long
+            case "initialPopulation": {
+                if(isLongParsable(value)){
+                    long l = Long.parseLong(value);
+                    if(l>=0){
+                        setSetting(key, l);
+                    }
+                }
+            }
+            break;
+            case "generateChart"://boolean
+            case "printOldPopulations":
+            {
+                setSetting(key,Boolean.parseBoolean(value));
+            }
+            break;
         }
+    }
+    private boolean isLongParsable(String value){
+        try{
+            Long.parseLong(value);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    private Object getSettingValue(String key){
+        List<Setting> collect = this.settingList.stream().filter(e -> e.getName().equals(key)).collect(Collectors.toList());
+        if(collect.size() == 1){
+            return collect.get(0).getValue();
+        }
+        return null;
     }
 }
