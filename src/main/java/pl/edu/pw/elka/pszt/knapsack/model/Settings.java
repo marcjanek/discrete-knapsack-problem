@@ -89,7 +89,6 @@ public class Settings extends FileGetter{
                 } else {
                     setSetting(key, val);
                 }
-                setSetting(key, val);
             }
             break;
             case "iterations"://long
